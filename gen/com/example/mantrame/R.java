@@ -11,10 +11,12 @@ public final class R {
     public static final class attr {
     }
     public static final class drawable {
-        public static final int ic_launcher=0x7f020000;
+        public static final int download=0x7f020000;
+        public static final int ic_launcher=0x7f020001;
+        public static final int image5=0x7f020002;
+        public static final int widget_background_1=0x7f020003;
     }
     public static final class id {
-        public static final int button1=0x7f070009;
         public static final int buttonConfigDone=0x7f070006;
         public static final int editTextEmailAddress=0x7f070001;
         public static final int editTextPersonName=0x7f070000;
