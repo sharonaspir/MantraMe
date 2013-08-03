@@ -27,7 +27,7 @@ public class MantraMeWidget extends AppWidgetProvider{
 		Log.w("11111111", "im in onUpdate");
 
 		UserProfile user = UserProfile.userProfileUsed;
-		MantraGetter getter = new MantraGetter(user);
+		MantraGetter getter = new MantraGetter(user, context);
 
 		if (user != null){
 			final int N = appWidgetIds.length;
@@ -35,12 +35,12 @@ public class MantraMeWidget extends AppWidgetProvider{
 			for (int i=0; i<N; i++) {
 				int appWidgetId = appWidgetIds[i];
 				RemoteViews view = new RemoteViews(context.getPackageName(), R.layout.widgetlayout);
-				
+
 				Mantra mantra = getter.GetNewMantra();
-				
+
 				view.setTextViewText(R.id.textViewMantraShown, mantra.man_str);
 				view.setTextViewText(R.id.textViewUserNameInWidget, user.name);
-				
+
 				appWidgetManager.updateAppWidget(appWidgetId, view);
 			}
 		}
