@@ -13,11 +13,10 @@ public class DataBaseManager {
 
 	DataBaseHelper db;
 
-	public DataBaseManager(Context context){
-		
+	public DataBaseManager(Context context){		
 		db = new DataBaseHelper(context,"MyDB",null,1);
 	}
-	
+
 	public List<Mantra> GetAllMantra(){
 
 		List<Mantra> allMantras = new LinkedList<Mantra>();
@@ -54,13 +53,13 @@ public class DataBaseManager {
 	}
 
 	public void AddMantra(List<Mantra> mantras){
-		
-		Log.w("3333333333333", "AddMantra");
+
+		Log.w("DataBaseManager1", "AddMantra called, " + mantras.size() + " mantras will be added to DB");
 		for (Mantra mantra : mantras) {
 			AddMantra(mantra);
 		}
 	}
-	
+
 	public void AddMantra(Mantra mantra){
 
 		String sql = "INSERT INTO " + DataBaseHelper.tableName +
@@ -74,8 +73,8 @@ public class DataBaseManager {
 				mantra.ReleventHealth +
 				")";
 
-		Log.w("MantraMe", sql);
-		
+		Log.w("DataBaseManager2", sql);
+
 		SQLiteDatabase tbls = db.getWritableDatabase();	
 		tbls.execSQL(sql);
 	}
@@ -83,10 +82,10 @@ public class DataBaseManager {
 	private Mantra GetMantraFromCursor(Cursor c) {
 
 		Mantra m = new Mantra(c.getString(2), c.getString(1), c.getString(0));
-		m.SetRelevents(c.getInt(3), c.getInt(4), c.getInt(5), c.getInt(6));
-		
-		Log.w("MantraMe", m.toString());
-		
+		m.SetRelevents(c.getInt(3), c.getInt(4), c.getInt(5), c.getInt(6));		
+		Log.w("DataBaseManager3", m.toString());		
 		return m;
 	}
+
+
 }

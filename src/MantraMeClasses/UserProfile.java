@@ -13,8 +13,12 @@ public class UserProfile {
 	public String name;	
 	public String email;	
 	public Date joinDate;
-	public LinkedList<Mantra> mantras;	
-	private String password;
+	public LinkedList<Mantra> localMantras;	
+
+	@Override
+	public String toString() {
+		return "name: " + name + ". email " + email; 
+	}
 
 	public int intrestEducation;
 	public int intrestNewAge;
@@ -27,7 +31,7 @@ public class UserProfile {
 		this.name = name;
 		this.email = email;
 		this.joinDate = new Date();
-		this.mantras = new LinkedList<Mantra>();		
+		this.localMantras = new LinkedList<Mantra>();		
 	}
 
 	public void SetInterst(int education, int newAge,int sport,int health){
@@ -35,15 +39,5 @@ public class UserProfile {
 		intrestNewAge = newAge;
 		intrestSport= sport;
 		intrestHealth = health; 
-	}
-
-	public Boolean isPassWord(String str) {
-		return str.equals(this.password);
-	}
-
-	public void setPassword(String old, String pass) {
-		if (isPassWord(old)){
-			this.password = pass;
-		}
 	}
 }

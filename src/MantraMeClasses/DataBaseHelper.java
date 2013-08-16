@@ -27,14 +27,12 @@ public class DataBaseHelper extends SQLiteOpenHelper{
 	public  DataBaseHelper(Context context, String name, CursorFactory factory,int version) {
 		super(context, name, factory, version);
 	}
-
-	@Override
+	
 	public void onCreate(SQLiteDatabase db) {
-		Log.w("3333333333333", "onCreate");
+		Log.w("DataBaseHelper", "onCreate");
 		db.execSQL(createTable);		
 	}
 
-	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		db.execSQL(deleteTable);
 		onCreate(db);

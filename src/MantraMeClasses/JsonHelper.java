@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import com.cedarsoftware.util.io.JsonWriter;
 
 public class JsonHelper {
-	
+
 	public static String mantarasToJason(ArrayList<Mantra> allMantras){
 		String allData = "";
 		for (Mantra m : allMantras) {		
@@ -14,12 +14,12 @@ public class JsonHelper {
 		}
 		return allData;
 	}
-	
+
 	public static String mantarasToJason(Mantra m){
 		String allData = JsonWriter.toJson( m ) + "\n";
 		return allData;
 	}
-	
+
 	/*
 	public static ArrayList<Mantra> readMantrasFromFile(String fileName) {
 		 ArrayList<Mantra> allMan = new ArrayList<Mantra>();		
@@ -37,7 +37,7 @@ public class JsonHelper {
 				String line = dis.readLine();
 				Mantra m = (Mantra) JsonReader.toJava(line);
 				allMan.add(m);
-				
+
 	        }
 	        fis.close();
 	        bis.close();
@@ -49,18 +49,18 @@ public class JsonHelper {
 	      }	    
 		return allMan;
 	}
-	*/
-	
+	 */
+
 	public static void writeToFile(String allData) {
 		try {
-	    	  FileWriter fstream = new FileWriter("out.txt");
-	          BufferedWriter out = new BufferedWriter(fstream);
-	          out.write(allData);
-	          out.flush();
-	          out.close();
-	          fstream.close();
-	    	} catch (Exception e) {
-	    	  e.printStackTrace();    	
-	    	}  
+			FileWriter fstream = new FileWriter("out.txt");
+			BufferedWriter out = new BufferedWriter(fstream);
+			out.write(allData);
+			out.flush();
+			out.close();
+			fstream.close();
+		} catch (Exception e) {
+			e.printStackTrace();    	
+		}  
 	}
 }

@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.mantrame"
     android:versionCode="1"
@@ -6,6 +7,8 @@
     <uses-sdk
         android:minSdkVersion="8"
         android:targetSdkVersion="17" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -17,6 +20,7 @@
             android:label="Mantra Me Widget" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="android.appwidget.action.ACTION_WIDGET_CLICK" />
             </intent-filter>
 
             <meta-data
@@ -25,11 +29,29 @@
         </receiver>
 
         <activity
-            android:name="com.Sharon.MantraMeWidget.WidgetConfig"
-            android:label="Config Widget" >
+            android:name="com.Sharon.MantraMeWidget.AddNewUser"
+            android:label="Add new user" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.Settings" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.Sharon.MantraMeWidget.Testing"
+            android:label="Testing" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.Settings" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.Sharon.MantraMeWidget.WidgetConfigPage"
+            android:label="Login" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name="com.Sharon.MantraMeWidget.Options"
+            android:label="@string/title_activity_options" >
         </activity>
     </application>
 

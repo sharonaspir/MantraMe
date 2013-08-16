@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
-    android:configure="com.Sharon.MantraMeWidget.WidgetConfig"
+    android:configure="com.Sharon.MantraMeWidget.WidgetConfigPage"
     android:initialLayout="@layout/widgetlayout"
     android:minHeight="50dp"
     android:minWidth="150dp"

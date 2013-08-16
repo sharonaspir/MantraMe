@@ -34,7 +34,7 @@ public class Mantra {
 		ReleventNewAge = 50;
 		ReleventHealth = 50;
 	}
-	
+
 	public void SetRelevents(int sport, int education, int newAge, int health){
 		ReleventSport = sport;
 		ReleventEducation = education;
@@ -47,13 +47,12 @@ public class Mantra {
 		ans += "man_str : " + this.man_str + " ,";
 		ans += "Mantra creation Date : " + this.creationDate.toString() + " ,";
 		ans += "Mantra Name : " + this.mantraName + " ,";
-		
+
 		ans += "ReleventSport : " + this.ReleventSport + " ,";
 		ans += "ReleventEducation : " + this.ReleventEducation + " ,";
 		ans += "ReleventNewAge : " + this.ReleventNewAge + " ,";
 		ans += "ReleventHealth : " + this.ReleventHealth + " ,";
-		
-		
+
 		return ans;			
 	}
 }

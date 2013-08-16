@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/widget_layout"    
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/widget_background_1"
@@ -9,17 +10,17 @@
         android:id="@+id/textViewUserNameInWidget"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="NameLess"
         android:paddingLeft="10dp"
         android:paddingTop="5dp"
+        android:text="NameLess"
         android:textColor="#22E01B" />
 
     <TextView
         android:id="@+id/textViewMantraShown"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:paddingLeft="10dp"
         android:text="n/a"
-         android:paddingLeft="10dp"
         android:textColor="#1B1EE0" />
 
 </LinearLayout>
