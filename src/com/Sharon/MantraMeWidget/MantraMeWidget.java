@@ -38,7 +38,10 @@ public class MantraMeWidget extends AppWidgetProvider {
 
 				Mantra mantra = getter.GetNewMantra();
 
-				view.setTextViewText(R.id.textViewMantraShown, mantra.man_str);
+				if (mantra != null){
+					view.setTextViewText(R.id.textViewMantraShown, mantra.man_str);
+				}
+				
 				view.setTextViewText(R.id.textViewUserNameInWidget, user.name);
 
 				// Adding on click event handler, to the app widget

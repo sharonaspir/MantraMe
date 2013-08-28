@@ -33,7 +33,15 @@ public class UserProfile {
 		this.joinDate = new Date();
 		this.localMantras = new LinkedList<Mantra>();		
 	}
-
+	
+	public UserProfile(String name, String email, String id){		
+		this.userId = id;
+		this.name = name;
+		this.email = email;
+		this.joinDate = new Date();
+		this.localMantras = new LinkedList<Mantra>();		
+	}
+	
 	public void SetInterst(int education, int newAge,int sport,int health){
 		intrestEducation = education;
 		intrestNewAge = newAge;

@@ -52,8 +52,9 @@ public final class R {
         public static final int activity_addnewuser=0x7f030000;
         public static final int activity_options=0x7f030001;
         public static final int testing=0x7f030002;
-        public static final int widgetconfigpage=0x7f030003;
-        public static final int widgetlayout=0x7f030004;
+        public static final int widgetconfig=0x7f030003;
+        public static final int widgetconfigpage=0x7f030004;
+        public static final int widgetlayout=0x7f030005;
     }
     public static final class menu {
         public static final int login=0x7f080000;

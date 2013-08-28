@@ -34,6 +34,10 @@ public class Mantra {
 		ReleventNewAge = 50;
 		ReleventHealth = 50;
 	}
+	
+	public void SetCreationDate(Date date){
+		this.creationDate = date;		
+	}
 
 	public void SetRelevents(int sport, int education, int newAge, int health){
 		ReleventSport = sport;

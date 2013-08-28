@@ -63,7 +63,7 @@ public class WidgetConfigPage extends Activity {
 	protected void onActivityResult(int requestCode, int resultCode, Intent data){
 		super.onActivityResult(requestCode, resultCode, data);
 
-		Log.w("111111" , "onActivityResult. requestCode " + requestCode + " resultCode" + resultCode);
+		Log.w("WidgetConfigPage" , "onActivityResult. requestCode " + requestCode + " resultCode" + resultCode);
 
 		if (requestCode == REQUESTCODE ) {
 			end();
@@ -76,7 +76,7 @@ public class WidgetConfigPage extends Activity {
 			Intent k = new Intent(getApplicationContext(), AddNewUser.class);
 			startActivityForResult(k,REQUESTCODE);
 		}catch(Exception e){
-			Log.w("111111" , "Exception! \n" + e);
+			Log.w("WidgetConfigPage" , "Exception! \n" + e);
 		}	
 	}
 
@@ -85,15 +85,15 @@ public class WidgetConfigPage extends Activity {
 		String mail = ((EditText) findViewById(R.id.user_mail)).getText().toString();
 		String pass = ((EditText) findViewById(R.id.user_password)).getText().toString();
 
-		Log.w("111111" , "mail " + mail + " pass " + pass);
+		Log.w("WidgetConfigPage" , "onLoginRegisteredUserClicked mail " + mail + " pass " + pass);
 
 		UserProfile user = addNewUserToServer(mail, pass);
 		
 		// Set our user
 		UserProfile.userProfileUsed = user;
 				
-		if (user != null){
-			Log.w("111111" , "user " + user.toString());
+		if (user != null){ 
+			Log.w("WidgetConfigPage" , "user " + user.toString());
 		}
 
 		end();
@@ -145,7 +145,7 @@ public class WidgetConfigPage extends Activity {
 		boolean failure = false;
 
 		protected void onPreExecute() {
-			Log.w("444444" , "addNewUser onPreExecute");
+			Log.w("LoginUser" , "onPreExecute");
 			super.onPreExecute();
 			pDialog = new ProgressDialog(WidgetConfigPage.this);
 			pDialog.setMessage("Attempting connection...");
@@ -155,7 +155,7 @@ public class WidgetConfigPage extends Activity {
 		}
 
 		protected String doInBackground(String... args) {
-			Log.w("444444" , "addNewUser doInBackground");
+			Log.w("LoginUser" , "doInBackground");
 			user = ServerDataBaseManager.getUser(mail, password);
 			if (user == null) return "null";
 			return user.toString();
@@ -165,7 +165,7 @@ public class WidgetConfigPage extends Activity {
 		 * After completing background task Dismiss the progress dialog
 		 * **/
 		protected void onPostExecute(String file_url) {
-			Log.w("444444" , "addNewUser onPostExecute");
+			Log.w("LoginUser" , "onPostExecute");
 			// dismiss the dialog once product deleted
 			pDialog.dismiss();
 			if (file_url != null){
