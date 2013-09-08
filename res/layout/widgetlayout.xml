@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/widget_layout"    
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/widget_background_1"
     android:orientation="vertical" >
 
+    <ImageView
+    android:id="@+id/backgroundImage"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:src="@drawable/background3"
+    android:scaleType="fitXY"/>
+    
     <TextView
         android:id="@+id/textViewUserNameInWidget"
         android:layout_width="wrap_content"
@@ -13,14 +19,17 @@
         android:paddingLeft="10dp"
         android:paddingTop="5dp"
         android:text="NameLess"
-        android:textColor="#22E01B" />
+        android:textColor="@android:color/holo_orange_light" />
 
     <TextView
         android:id="@+id/textViewMantraShown"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/textViewUserNameInWidget"
         android:paddingLeft="10dp"
-        android:text="n/a"
-        android:textColor="#1B1EE0" />
+        android:text="Loading..."
+        android:textColor="@android:color/white"
+        android:textSize="25sp" />
 
-</LinearLayout>
+</RelativeLayout>

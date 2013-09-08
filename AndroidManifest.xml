@@ -53,6 +53,10 @@
             android:name="com.Sharon.MantraMeWidget.Options"
             android:label="@string/title_activity_options" >
         </activity>
+        <activity
+            android:name="com.Sharon.MantraMeWidget.NewUserRatings"
+            android:label="@string/title_activity_new_user_ratings" >
+        </activity>
     </application>
 
 </manifest>

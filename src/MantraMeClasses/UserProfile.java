@@ -9,16 +9,12 @@ public class UserProfile {
 	
 	public static UserProfile userProfileUsed = null;
 	
+	private String password;
 	public String userId;
 	public String name;	
 	public String email;	
 	public Date joinDate;
 	public LinkedList<Mantra> localMantras;	
-
-	@Override
-	public String toString() {
-		return "name: " + name + ". email " + email; 
-	}
 
 	public int intrestEducation;
 	public int intrestNewAge;
@@ -47,5 +43,18 @@ public class UserProfile {
 		intrestNewAge = newAge;
 		intrestSport= sport;
 		intrestHealth = health; 
+	}
+	
+	public void SetPassWord(String pass){		
+		password = pass;
+	}
+	
+	public String GetPassWord(){		
+		return password;
+	}
+
+	@Override
+	public String toString() {
+		return "name: " + name + ". email " + email + " . pass " + password; 
 	}
 }

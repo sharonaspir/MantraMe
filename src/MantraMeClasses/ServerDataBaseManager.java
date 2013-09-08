@@ -11,11 +11,7 @@ import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import android.R.string;
-import android.text.format.DateFormat;
 import android.util.Log;
-
 
 public class ServerDataBaseManager {
 
@@ -103,10 +99,12 @@ public class ServerDataBaseManager {
 		return null;
 	}
 
-	public static String addUser(UserProfile user, String pass){		
+	public static String addUser(UserProfile user){		
 
-		if (user == null || pass == null || pass.equals("")){
-			return "Enter User Details and password";
+		Log.d("addUser", user.toString());
+		
+		if (user == null){
+			return "null";
 		}
 
 		int success;
@@ -114,11 +112,11 @@ public class ServerDataBaseManager {
 		try {
 			// Building Parameters
 			List<NameValuePair> params = new ArrayList<NameValuePair>();
-
+			
 			UUID id = UUID.randomUUID();
 			params.add(new BasicNameValuePair("id", id.toString()));
 			params.add(new BasicNameValuePair("username", user.name));
-			params.add(new BasicNameValuePair("password", pass));
+			params.add(new BasicNameValuePair("password", user.GetPassWord()));
 			params.add(new BasicNameValuePair("email", user.email));
 			params.add(new BasicNameValuePair("education", ""+ user.intrestEducation));
 			params.add(new BasicNameValuePair("newage", ""+user.intrestNewAge));
@@ -157,9 +155,9 @@ public class ServerDataBaseManager {
 
 	}
 
-	public static List<Mantra> getAllMantras1(){
+	public static List<Mantra> getAllMantras(){
 
-		List<Mantra> mantras = new LinkedList();
+		List<Mantra> mantras = new LinkedList<Mantra>();
 
 		Log.w("UserProfile.getAllMantras()" , "Starting");
 
@@ -178,7 +176,6 @@ public class ServerDataBaseManager {
 			}else{
 				Log.d("UserProfile.getAllMantras()", "NOT null");			
 			}
-
 
 			// check your log for json response
 			Log.d("UserProfile.getAllMantras()", json.toString());
@@ -202,7 +199,6 @@ public class ServerDataBaseManager {
 
 			}else{
 				Log.d("UserProfile.getAllMantras()", json.getString(TAG_MESSAGE));				
-
 				//String n = json.getString("Name");		
 
 				return null;

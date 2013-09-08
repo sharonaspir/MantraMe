@@ -19,7 +19,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.Sharon.MantraMeWidget.AddNewUser.addNewUser;
 import com.example.mantrame.R;
 
 public class WidgetConfigPage extends Activity {

@@ -1,6 +1,5 @@
 package MantraMeClasses;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
@@ -8,28 +7,18 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-import com.Sharon.MantraMeWidget.AddNewUser;
-import com.Sharon.MantraMeWidget.WidgetConfigPage.LoginUser;
-
-import android.app.ProgressDialog;
-import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.Toast;
 
 public class MantraGetter {
 
-	private UserProfile userProfile;	
-	private List<Mantra> allMantras;
+	private static Mantra currentMantra = null;	
+	private static List<Mantra> allMantras = new LinkedList<Mantra>();
 
-	public MantraGetter(UserProfile user, Context context){		
-		userProfile = user;		
-		allMantras = new LinkedList<Mantra>();
-
-		getAllMantrasFromServer();						
+	public MantraGetter(){				
 	}
 
-	private void getAllMantrasFromServer() {
+	public void getAllMantrasFromServer() {
 		GetAllMantrasAction action = new GetAllMantrasAction();
 		action.execute();	
 		try {
@@ -47,13 +36,32 @@ public class MantraGetter {
 		allMantras = action.mantras;
 	}
 
-	public Mantra GetNewMantra(){
+	public static void next(){
 		if (allMantras == null || allMantras.size() == 0){
-			return null;
+			return;
 		}
+
+		Mantra man = null;
+		int count = 0;
 		Random r = new Random();
-		int indexRandom = r.nextInt(allMantras.size());
-		return allMantras.get(indexRandom);		
+
+		if (currentMantra == null){
+			int indexRandom = r.nextInt(allMantras.size());
+			man = allMantras.get(indexRandom);	
+		}
+		else{
+			while ((man == null || man.mantra_id.equals(currentMantra.mantra_id)) && count++ < 100){
+				int indexRandom = r.nextInt(allMantras.size());
+				man = allMantras.get(indexRandom);
+			}
+		}
+
+		currentMantra = man;
+	}
+
+
+	public static Mantra getCurrentMantra(){
+		return currentMantra;
 	}
 
 	public class GetAllMantrasAction extends AsyncTask<String, String, String> {
