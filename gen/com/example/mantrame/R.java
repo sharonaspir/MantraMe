@@ -33,9 +33,10 @@ public final class R {
         public static final int white=0x7f020009;
     }
     public static final class id {
-        public static final int action_forgot_password=0x7f09001f;
-        public static final int action_settings=0x7f090020;
-        public static final int backgroundImage=0x7f09001b;
+        public static final int action_forgot_password=0x7f090020;
+        public static final int action_settings=0x7f090021;
+        public static final int backgroundImage=0x7f09001c;
+        public static final int btnAnonymous=0x7f09001a;
         public static final int btnLogin=0x7f090018;
         public static final int btnRegister=0x7f090019;
         public static final int buttonAddNewUserRatingDone=0x7f09000a;
@@ -60,12 +61,12 @@ public final class R {
         public static final int tableRow4=0x7f090012;
         public static final int tableRow5=0x7f090014;
         public static final int tableRow6=0x7f090010;
-        public static final int textViewAutorInWidget=0x7f09001e;
-        public static final int textViewMantraShown=0x7f09001d;
-        public static final int textViewUserNameInWidget=0x7f09001c;
+        public static final int textViewAutorInWidget=0x7f09001f;
+        public static final int textViewMantraShown=0x7f09001e;
+        public static final int textViewUserNameInWidget=0x7f09001d;
         public static final int user_mail=0x7f090016;
         public static final int user_password=0x7f090017;
-        public static final int widget_layout=0x7f09001a;
+        public static final int widget_layout=0x7f09001b;
     }
     public static final class layout {
         public static final int activity_addnewuser=0x7f030000;

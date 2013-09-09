@@ -14,6 +14,7 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
 import android.util.Log;
 import android.util.TypedValue;
 import android.widget.RemoteViews;
@@ -25,6 +26,8 @@ public class MantraMeWidget extends AppWidgetProvider {
 
 	public static final int NUMBER_OF_STYLES = 6;
 	public static int styleNumberUsed = -1;
+	
+	private static boolean firstRun = true;
 
 	public void onUpdate(Context context, AppWidgetManager appWidgetManager,
 			int[] appWidgetIds) {
@@ -37,8 +40,7 @@ public class MantraMeWidget extends AppWidgetProvider {
 
 		UserProfile user = UserProfile.userProfileUsed;
 		MantraGetter getter = new MantraGetter();
-		getter.getAllMantrasFromServer();
-
+		
 		for (int i=0; i<N; i++) {
 			int appWidgetId = appWidgetIds[i];
 			RemoteViews view = new RemoteViews(context.getPackageName(), R.layout.widgetlayout);

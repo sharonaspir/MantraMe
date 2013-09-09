@@ -24,7 +24,9 @@ public class Options extends Activity {
 		setContentView(R.layout.activity_options);
 
 		Mantra mantra = MantraGetter.getCurrentMantra();	
-		updateMantraText(mantra);		
+		if (mantra != null){
+			updateMantraText(mantra);	
+		}
 	}
 
 	@Override
@@ -39,18 +41,18 @@ public class Options extends Activity {
 		Mantra mantra = MantraGetter.getCurrentMantra();	
 
 		updateMantraText(mantra);
-		
+
 		Context context = this;
 		AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
 		RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widgetlayout);
 		ComponentName thisWidget = new ComponentName(context, MantraMeWidget.class);
 		remoteViews.setTextViewText(R.id.textViewMantraShown, mantra.man_str);
 		remoteViews.setTextViewText(R.id.textViewAutorInWidget, mantra.author);
-		
+
 		MantraMeWidget.checkStyle(mantra, remoteViews);
-		
+
 		appWidgetManager.updateAppWidget(thisWidget, remoteViews);
-		
+
 
 		/*
 		Intent intent = new Intent(this, MantraMeWidget.class);
@@ -62,29 +64,29 @@ public class Options extends Activity {
 	}
 
 	public void refreshMantrasFromServer(View view) {			
-		
+
 		MantraGetter getter = new MantraGetter();
 		getter.getAllMantrasFromServer();		
-		
+
 	}
 
 	public void okClicked(View view) {	
 		finish();
 	}
-	
+
 	public void nextStyleClicked(View view) {	
-		
+
 		Log.w("nextStyleClicked" , "nextStyleClicked ....");
 
 		Context context = this;
-		
+
 		RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widgetlayout);
 		MantraMeWidget.changeWidgetStyle(remoteViews);
 
 		ComponentName thisWidget = new ComponentName(context, MantraMeWidget.class);
 		AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
 		appWidgetManager.updateAppWidget(thisWidget, remoteViews);
-		
+
 		Toast.makeText(Options.this, "Style Changed", Toast.LENGTH_LONG).show();
 	}
 
@@ -92,6 +94,6 @@ public class Options extends Activity {
 		TextView mantraText = (TextView) findViewById(R.id.optionsTextViewMantraShown);		
 		if (mantra != null)	mantraText.setText(mantra.man_str);
 	}
-	
-	
+
+
 }

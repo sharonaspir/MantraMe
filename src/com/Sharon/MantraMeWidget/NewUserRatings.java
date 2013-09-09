@@ -10,6 +10,7 @@ import java.util.concurrent.TimeoutException;
 
 import com.example.mantrame.R;
 
+import MantraMeClasses.MantraGetter;
 import MantraMeClasses.ServerDataBaseManager;
 import MantraMeClasses.UserProfile;
 import android.net.ConnectivityManager;
@@ -77,6 +78,7 @@ public class NewUserRatings extends Activity {
 		if (succses){
 
 			Log.w("SHARON" , "succses to connect to server");
+			updateMantras();
 			finish();
 		}
 		else{
@@ -102,6 +104,13 @@ public class NewUserRatings extends Activity {
 		
 	}
 
+	public void updateMantras(){
+		ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);		
+		MantraGetter getter = new MantraGetter();
+		getter.connectivityManager = cm;		
+		getter.getAllMantrasFromServer();	
+	}
+	
 	private boolean addNewUserToServer(UserProfile user) {		
 		addNewUser action = new addNewUser();
 		action.usr = user;

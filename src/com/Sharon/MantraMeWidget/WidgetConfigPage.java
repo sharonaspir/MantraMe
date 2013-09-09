@@ -8,6 +8,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import MantraMeClasses.MantraGetter;
 import MantraMeClasses.ServerDataBaseManager;
 import MantraMeClasses.UserProfile;
 import android.app.Activity;
@@ -85,6 +86,15 @@ public class WidgetConfigPage extends Activity {
 		}	
 	}
 
+
+	public void onAnonymousClicked(View view){
+		UserProfile.userProfileUsed = null;	
+
+		updateMantras();
+		
+		end();
+	}
+	
 	public void onLoginRegisteredUserClicked(View view){
 
 		String mail = ((EditText) findViewById(R.id.user_mail)).getText().toString();
@@ -109,10 +119,18 @@ public class WidgetConfigPage extends Activity {
 			
 			// Set our user
 			UserProfile.userProfileUsed = user;	
+			updateMantras();
 			end();
 		}
 	}
 
+	public void updateMantras(){
+		ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);		
+		MantraGetter getter = new MantraGetter();
+		getter.connectivityManager = cm;		
+		getter.getAllMantrasFromServer();	
+	}
+	
 	public void end(){
 		// Update the widget info
 		Intent updateWidget = new Intent(getApplicationContext(), MantraMeWidget.class);
