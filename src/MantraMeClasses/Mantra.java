@@ -6,7 +6,7 @@ import java.util.Date;
 public class Mantra {
 	public String man_str;
 	public Date creationDate;
-	public String mantraName;
+	public String author;
 	public String mantra_id;
 	public int ReleventSport;
 	public int ReleventEducation;
@@ -16,7 +16,7 @@ public class Mantra {
 	public Mantra(){
 		this.man_str = "";
 		this.creationDate = new Date();
-		this.mantraName = "";
+		this.author = "";
 		this.mantra_id = "-1";
 		ReleventSport = 50;
 		ReleventEducation = 50;
@@ -24,10 +24,10 @@ public class Mantra {
 		ReleventHealth = 50;
 	}
 
-	public Mantra(String mantra, String name, String id){
+	public Mantra(String mantra, String author, String id){
 		this.man_str = mantra;
 		this.creationDate = new Date();
-		this.mantraName = name;
+		this.author = author;
 		this.mantra_id = id;
 		ReleventSport = 50;
 		ReleventEducation = 50;
@@ -50,7 +50,7 @@ public class Mantra {
 		String ans = "\n[Mantra id : " + this.mantra_id+ " ,";
 		ans += "man_str : " + this.man_str + " ,";
 		ans += "Mantra creation Date : " + this.creationDate.toString() + " ,";
-		ans += "Mantra Name : " + this.mantraName + " ,";
+		ans += "Mantra Name : " + this.author + " ,";
 
 		ans += "ReleventSport : " + this.ReleventSport + " ,";
 		ans += "ReleventEducation : " + this.ReleventEducation + " ,";

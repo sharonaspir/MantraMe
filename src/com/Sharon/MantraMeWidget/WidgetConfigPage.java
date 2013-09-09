@@ -1,5 +1,9 @@
 package com.Sharon.MantraMeWidget;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -11,6 +15,8 @@ import android.app.ProgressDialog;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -26,7 +32,7 @@ public class WidgetConfigPage extends Activity {
 	private static int REQUESTCODE = 1;
 	private int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
 	private AppWidgetManager awm;
-	private Context c;
+	private Context context;
 
 	// Progress Dialog
 	private ProgressDialog pDialog;
@@ -37,7 +43,7 @@ public class WidgetConfigPage extends Activity {
 		setContentView(R.layout.widgetconfigpage);
 
 		// Set context
-		c = WidgetConfigPage.this;
+		context = WidgetConfigPage.this;
 
 		// Get and Set the widget id
 		Intent i = getIntent();
@@ -49,7 +55,7 @@ public class WidgetConfigPage extends Activity {
 		}
 
 		// Set AppWidgetManager
-		awm = AppWidgetManager.getInstance(c);
+		awm = AppWidgetManager.getInstance(context);
 	}
 
 	@Override
@@ -84,18 +90,27 @@ public class WidgetConfigPage extends Activity {
 		String mail = ((EditText) findViewById(R.id.user_mail)).getText().toString();
 		String pass = ((EditText) findViewById(R.id.user_password)).getText().toString();
 
+		if (mail.isEmpty() || pass.isEmpty()){
+			Toast.makeText(WidgetConfigPage.this, "Enter email and password", Toast.LENGTH_LONG).show();
+			return;
+		}		
+		
 		Log.w("WidgetConfigPage" , "onLoginRegisteredUserClicked mail " + mail + " pass " + pass);
 
-		UserProfile user = addNewUserToServer(mail, pass);
+		UserProfile user = getUserByMailPass(mail, pass);
 		
-		// Set our user
-		UserProfile.userProfileUsed = user;
-				
-		if (user != null){ 
-			Log.w("WidgetConfigPage" , "user " + user.toString());
-		}
+		if (user == null){
+			Toast.makeText(WidgetConfigPage.this, "Failed to login", Toast.LENGTH_LONG).show();
+			((EditText) findViewById(R.id.user_mail)).setText("");
+			((EditText) findViewById(R.id.user_password)).setText("");
+		}else{	
 
-		end();
+			Log.w("WidgetConfigPage" , "user " + user.toString());
+			
+			// Set our user
+			UserProfile.userProfileUsed = user;	
+			end();
+		}
 	}
 
 	public void end(){
@@ -113,8 +128,12 @@ public class WidgetConfigPage extends Activity {
 		finish();
 	}
 
-	private UserProfile addNewUserToServer(String mail, String password) {		
+	private UserProfile getUserByMailPass(String mail, String password) {	
+
+		Log.w("SHARON" , "checkConnection true");
+
 		LoginUser action = new LoginUser();
+		action.context = this;
 		action.mail = mail;
 		action.password = password;
 		action.execute();		
@@ -141,7 +160,8 @@ public class WidgetConfigPage extends Activity {
 		public UserProfile user = null;
 		public String password;
 		public String mail;
-		boolean failure = false;
+		public boolean failure = false;
+		public Context context;
 
 		protected void onPreExecute() {
 			Log.w("LoginUser" , "onPreExecute");
@@ -155,14 +175,16 @@ public class WidgetConfigPage extends Activity {
 
 		protected String doInBackground(String... args) {
 			Log.w("LoginUser" , "doInBackground");
+			
+			if (!isURLReachable(context, ServerDataBaseManager.URL_LOGIN)){
+				return null;
+			}			
+			
 			user = ServerDataBaseManager.getUser(mail, password);
 			if (user == null) return "null";
 			return user.toString();
 		}
 
-		/**
-		 * After completing background task Dismiss the progress dialog
-		 * **/
 		protected void onPostExecute(String file_url) {
 			Log.w("LoginUser" , "onPostExecute");
 			// dismiss the dialog once product deleted
@@ -171,9 +193,41 @@ public class WidgetConfigPage extends Activity {
 				Toast.makeText(WidgetConfigPage.this, file_url, Toast.LENGTH_LONG).show();
 			}
 			else{
-				Toast.makeText(WidgetConfigPage.this, "Problem", Toast.LENGTH_LONG).show();
+				Toast.makeText(WidgetConfigPage.this, "Problem login user", Toast.LENGTH_LONG).show();
+				//Toast.makeText(WidgetConfigPage.this, "Loged in as anonymous", Toast.LENGTH_LONG).show();
 			}
 		}		
+
+		public boolean isURLReachable(Context context, String urlString) {
+
+			ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+			NetworkInfo netInfo = cm.getActiveNetworkInfo();
+
+			if (netInfo != null && netInfo.isConnected()) {
+				try {
+
+					URL url = new URL(urlString);  
+					HttpURLConnection urlc = (HttpURLConnection) url.openConnection();
+					urlc.setConnectTimeout(10 * 1000);          // 10 s.
+					urlc.connect();	            
+
+					if (urlc.getResponseCode() == 200) {        // 200 = "OK" code (http connection is fine).
+						Log.wtf("Connection", "Success !");
+						return true;
+					} else {
+						return false;
+					}
+				} catch (MalformedURLException e1) {
+					return false;
+				} catch (IOException e) {
+					return false;
+				}catch (Exception e) {
+					Log.wtf("SHARON", "e " + e);
+					return false;
+				}
+			}
+			return false;
+		}
 	}
 }
 

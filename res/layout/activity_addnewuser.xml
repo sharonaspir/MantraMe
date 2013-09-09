@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/background_light"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
@@ -20,6 +21,7 @@
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:text="Full Name"
+            android:textColor="@android:color/holo_orange_dark"
             android:textSize="30sp" />
 
         <EditText
@@ -37,6 +39,7 @@
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:text="Email"
+            android:textColor="@android:color/holo_orange_dark"
             android:textSize="30sp" />
 
         <EditText
@@ -53,11 +56,13 @@
             android:gravity="center_horizontal"
             android:text=" "
             android:textSize="30sp" />
-        <TextView
+
+        <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:text="Password"
+            android:textColor="@android:color/holo_orange_dark"
             android:textSize="30sp" />
 
         <EditText
@@ -73,6 +78,7 @@
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:text="Confirm Password"
+            android:textColor="@android:color/holo_orange_dark"
             android:textSize="30sp" />
 
         <EditText
@@ -90,10 +96,10 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:background="#B3C1FF"
+        android:background="@android:color/holo_blue_light"
         android:gravity="center"
         android:onClick="nextClicked"
         android:text="Next"
-        android:textColor="#1B3FE0" />
+        android:textColor="@android:color/white" />
 
 </RelativeLayout>

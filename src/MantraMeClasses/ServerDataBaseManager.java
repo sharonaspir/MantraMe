@@ -11,18 +11,19 @@ import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import android.util.Log;
 
-public class ServerDataBaseManager {
+public class ServerDataBaseManager{
 
 	static JSONParser jsonParser = new JSONParser();
-	private static final String SERVER_IP 			= "10.0.0.10";
-	private static final String URL_ADDUSER 		= "http://" + SERVER_IP + "/MyMantra/addUser.php";
-	private static final String URL_LOGIN			= "http://" + SERVER_IP + "/MyMantra/getUserByEMailAndPassword.php";
-	private static final String URL_GETALLMANTRAS 	= "http://" + SERVER_IP + "/MyMantra/getAllMantras.php";
+	public static final String SERVER_IP 			= "10.0.0.10";
+	public static final String URL_ADDUSER 		= "http://" + SERVER_IP + "/MyMantra/addUser.php";
+	public static final String URL_LOGIN			= "http://" + SERVER_IP + "/MyMantra/getUserByEMailAndPassword.php";
+	public static final String URL_GETALLMANTRAS 	= "http://" + SERVER_IP + "/MyMantra/getAllMantras.php";
 
-	private static final String TAG_SUCCESS = "success";
-	private static final String TAG_MESSAGE = "message";
+	public static final String TAG_SUCCESS = "success";
+	public static final String TAG_MESSAGE = "message";
 
 	// USERS
 
@@ -100,7 +101,7 @@ public class ServerDataBaseManager {
 	}
 
 	public static String addUser(UserProfile user){		
-
+		
 		Log.d("addUser", user.toString());
 		
 		if (user == null){
@@ -119,9 +120,9 @@ public class ServerDataBaseManager {
 			params.add(new BasicNameValuePair("password", user.GetPassWord()));
 			params.add(new BasicNameValuePair("email", user.email));
 			params.add(new BasicNameValuePair("education", ""+ user.intrestEducation));
-			params.add(new BasicNameValuePair("newage", ""+user.intrestNewAge));
-			params.add(new BasicNameValuePair("sport", ""+user.intrestSport));
-			params.add(new BasicNameValuePair("health", ""+user.intrestHealth));
+			params.add(new BasicNameValuePair("newage", ""+ user.intrestNewAge));
+			params.add(new BasicNameValuePair("sport", ""+ user.intrestSport));
+			params.add(new BasicNameValuePair("health", ""+ user.intrestHealth));
 
 			Log.d("request!", "addUser starting");
 			// getting product details by making HTTP request
@@ -247,11 +248,11 @@ public class ServerDataBaseManager {
 			}
 
 		} catch (JSONException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 			mantra = null;
 		}
 
 		return mantra;
 	}	
+			
 }

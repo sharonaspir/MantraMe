@@ -61,6 +61,25 @@ public class MantraGetter {
 
 
 	public static Mantra getCurrentMantra(){
+		
+		String mant = currentMantra.man_str;
+		Boolean changed = false;
+		
+		if (!Character.isUpperCase(mant.charAt(0))){
+			String upper = mant.substring(0, 1).toUpperCase() + mant.substring(1);
+			mant = upper;
+			changed = true;
+		}
+		
+		if (!((mant.charAt((mant.length()) - 1)) == '.')){
+			mant += ".";
+			changed = true;
+		}
+		
+		if (changed){
+			currentMantra.man_str = mant;			
+		}
+		
 		return currentMantra;
 	}
 

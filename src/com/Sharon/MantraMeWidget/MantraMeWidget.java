@@ -1,6 +1,9 @@
 
 package com.Sharon.MantraMeWidget;
 
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.Random;
 
 import MantraMeClasses.Mantra;
@@ -17,7 +20,6 @@ import android.widget.RemoteViews;
 import android.widget.Toast;
 
 import com.example.mantrame.R;
-
 
 public class MantraMeWidget extends AppWidgetProvider {
 
@@ -37,41 +39,48 @@ public class MantraMeWidget extends AppWidgetProvider {
 		MantraGetter getter = new MantraGetter();
 		getter.getAllMantrasFromServer();
 
-		if (user != null){
+		for (int i=0; i<N; i++) {
+			int appWidgetId = appWidgetIds[i];
+			RemoteViews view = new RemoteViews(context.getPackageName(), R.layout.widgetlayout);
 
-			for (int i=0; i<N; i++) {
-				int appWidgetId = appWidgetIds[i];
-				RemoteViews view = new RemoteViews(context.getPackageName(), R.layout.widgetlayout);
+			MantraGetter.next();
+			Mantra mantra = MantraGetter.getCurrentMantra();
 
-				MantraGetter.next();
-				Mantra mantra = MantraGetter.getCurrentMantra();
-
-				if (mantra != null){
-					view.setTextViewText(R.id.textViewMantraShown, mantra.man_str);
-				}
-
-				checkStyle(mantra,view);
-				changeWidgetStyle(view);
-
-				view.setTextViewText(R.id.textViewUserNameInWidget, user.name);
-
-				// Adding on click event handler, to the app widget
-				Intent intent = new Intent(context, Options.class);
-				PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
-				view.setOnClickPendingIntent(R.id.widget_layout, pendingIntent);
-
-				appWidgetManager.updateAppWidget(appWidgetId, view);					
+			if (mantra != null){
+				view.setTextViewText(R.id.textViewMantraShown, mantra.man_str);
+				view.setTextViewText(R.id.textViewAutorInWidget, mantra.author);
 			}
-		}		
+
+			checkStyle(mantra,view);
+			changeWidgetStyle(view);
+
+			if (user != null){
+				view.setTextViewText(R.id.textViewUserNameInWidget, user.name);
+			}else{
+				// set user name to empty, and resize to 2 size
+				view.setTextViewText(R.id.textViewUserNameInWidget, "");
+				view.setFloat(R.id.textViewUserNameInWidget, "setTextSize", 2);
+			}
+
+			// Adding on click event handler, to the app widget
+			Intent intent = new Intent(context, Options.class);
+			PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+			view.setOnClickPendingIntent(R.id.widget_layout, pendingIntent);
+
+			appWidgetManager.updateAppWidget(appWidgetId, view);					
+		}
 	}
 
 	public static void checkStyle(Mantra mantra, RemoteViews view) {
 
-		if (mantra.man_str.length() > 50){
-			view.setTextViewTextSize(R.id.textViewMantraShown, TypedValue.COMPLEX_UNIT_SP, 12);
+		if (mantra.man_str.length() > 80){
+			view.setTextViewTextSize(R.id.textViewMantraShown, TypedValue.COMPLEX_UNIT_SP, 11);
+		}
+		else if (mantra.man_str.length() > 50){
+			view.setTextViewTextSize(R.id.textViewMantraShown, TypedValue.COMPLEX_UNIT_SP, 14);
 		}
 		else{
-			view.setTextViewTextSize(R.id.textViewMantraShown, TypedValue.COMPLEX_UNIT_SP, 16);
+			view.setTextViewTextSize(R.id.textViewMantraShown, TypedValue.COMPLEX_UNIT_SP, 18);
 		}
 	}
 
@@ -81,8 +90,6 @@ public class MantraMeWidget extends AppWidgetProvider {
 	}
 
 	public static void changeWidgetStyle(RemoteViews view){
-
-		// LinearLayout ll = (LinearLayout)this.findViewById(R.id.widget_layout);
 
 		if (styleNumberUsed == -1){			
 			Random r = new Random();
@@ -126,6 +133,6 @@ public class MantraMeWidget extends AppWidgetProvider {
 			view.setImageViewResource(R.id.backgroundImage, R.drawable.background0);			
 			break;
 		}
-
 	}
+
 }
