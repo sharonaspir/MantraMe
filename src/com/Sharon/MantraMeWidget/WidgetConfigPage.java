@@ -1,5 +1,6 @@
 package com.Sharon.MantraMeWidget;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -16,10 +17,12 @@ import android.app.ProgressDialog;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -42,9 +45,11 @@ public class WidgetConfigPage extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.widgetconfigpage);
-
+		
 		// Set context
 		context = WidgetConfigPage.this;
+		
+		MantraGetter.context = context;
 
 		// Get and Set the widget id
 		Intent i = getIntent();
@@ -88,6 +93,9 @@ public class WidgetConfigPage extends Activity {
 
 
 	public void onAnonymousClicked(View view){
+		
+		//ProgressDialog dialog = ProgressDialog.show(WidgetConfigPage.this, "", "Loading...", true);
+		
 		UserProfile.userProfileUsed = null;	
 
 		updateMantras();
@@ -125,10 +133,19 @@ public class WidgetConfigPage extends Activity {
 	}
 
 	public void updateMantras(){
-		ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);		
-		MantraGetter getter = new MantraGetter();
-		getter.connectivityManager = cm;		
-		getter.getAllMantrasFromServer();	
+		SharedPreferences wmbPreference = PreferenceManager.getDefaultSharedPreferences(this);
+		boolean isFirstRun = wmbPreference.getBoolean("FIRSTRUN", true);
+		if (isFirstRun)
+		{
+			Log.w("updateMantras" , "first Run");
+			ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);		
+			MantraGetter getter = new MantraGetter();
+			getter.connectivityManager = cm;		
+			getter.getAllMantrasFromServer();
+		}else{
+			Log.w("updateMantras" , "Not first Run");
+		}
+			
 	}
 	
 	public void end(){

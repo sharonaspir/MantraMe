@@ -1,8 +1,17 @@
 package MantraMeClasses;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedWriter;
+import java.io.DataInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
+
+import android.util.JsonReader;
+
 import com.cedarsoftware.util.io.JsonWriter;
 
 public class JsonHelper {
@@ -20,9 +29,9 @@ public class JsonHelper {
 		return allData;
 	}
 
-	/*
+	
 	public static ArrayList<Mantra> readMantrasFromFile(String fileName) {
-		 ArrayList<Mantra> allMan = new ArrayList<Mantra>();		
+		ArrayList<Mantra> allMan = new ArrayList<Mantra>();		
 		File file = new File(fileName);
 	    FileInputStream fis = null;
 	    BufferedInputStream bis = null;
@@ -35,10 +44,12 @@ public class JsonHelper {
 
 	        while (dis.available() != 0) {
 				String line = dis.readLine();
-				Mantra m = (Mantra) JsonReader.toJava(line);
-				allMan.add(m);
-
+				
+				//
+				
+				//allMan.add(m);
 	        }
+	        
 	        fis.close();
 	        bis.close();
 	        dis.close();
@@ -49,7 +60,7 @@ public class JsonHelper {
 	      }	    
 		return allMan;
 	}
-	 */
+	 
 
 	public static void writeToFile(String allData) {
 		try {

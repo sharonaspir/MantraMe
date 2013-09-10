@@ -1,20 +1,17 @@
 
 package com.Sharon.MantraMeWidget;
 
-import java.io.IOException;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.Random;
 
 import MantraMeClasses.Mantra;
 import MantraMeClasses.MantraGetter;
 import MantraMeClasses.UserProfile;
+import android.R.color;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
-import android.net.ConnectivityManager;
 import android.util.Log;
 import android.util.TypedValue;
 import android.widget.RemoteViews;
@@ -26,31 +23,29 @@ public class MantraMeWidget extends AppWidgetProvider {
 
 	public static final int NUMBER_OF_STYLES = 6;
 	public static int styleNumberUsed = -1;
-	
-	private static boolean firstRun = true;
 
-	public void onUpdate(Context context, AppWidgetManager appWidgetManager,
-			int[] appWidgetIds) {
+	public void onUpdate(Context context, AppWidgetManager appWidgetManager,int[] appWidgetIds) {
 
 		Log.w("33333333333", "onUpdate");
 
 		final int N = appWidgetIds.length;
 		super.onUpdate(context, appWidgetManager, appWidgetIds);
 
-
 		UserProfile user = UserProfile.userProfileUsed;
-		MantraGetter getter = new MantraGetter();
-		
-		for (int i=0; i<N; i++) {
-			int appWidgetId = appWidgetIds[i];
+
+		for (int i=0; i<N; i++) {						
+			int appWidgetId = appWidgetIds[i];			
+
+			Log.w("SHARON", "i = " + i + " .appWidgetId = " + appWidgetId);
+
 			RemoteViews view = new RemoteViews(context.getPackageName(), R.layout.widgetlayout);
 
 			MantraGetter.next();
 			Mantra mantra = MantraGetter.getCurrentMantra();
 
 			if (mantra != null){
-				view.setTextViewText(R.id.textViewMantraShown, mantra.man_str);
-				view.setTextViewText(R.id.textViewAutorInWidget, mantra.author);
+				view.setTextViewText(R.id.textViewMantraShown, mantra.Description);
+				view.setTextViewText(R.id.textViewAutorInWidget, mantra.Author);
 			}
 
 			checkStyle(mantra,view);
@@ -75,14 +70,14 @@ public class MantraMeWidget extends AppWidgetProvider {
 
 	public static void checkStyle(Mantra mantra, RemoteViews view) {
 
-		if (mantra.man_str.length() > 80){
-			view.setTextViewTextSize(R.id.textViewMantraShown, TypedValue.COMPLEX_UNIT_SP, 11);
+		if (mantra.Description.length() > 100){
+			view.setTextViewTextSize(R.id.textViewMantraShown, TypedValue.COMPLEX_UNIT_SP, 13);
 		}
-		else if (mantra.man_str.length() > 50){
-			view.setTextViewTextSize(R.id.textViewMantraShown, TypedValue.COMPLEX_UNIT_SP, 14);
+		else if (mantra.Description.length() > 80){
+			view.setTextViewTextSize(R.id.textViewMantraShown, TypedValue.COMPLEX_UNIT_SP, 15);
 		}
 		else{
-			view.setTextViewTextSize(R.id.textViewMantraShown, TypedValue.COMPLEX_UNIT_SP, 18);
+			view.setTextViewTextSize(R.id.textViewMantraShown, TypedValue.COMPLEX_UNIT_SP, 20);
 		}
 	}
 
@@ -114,27 +109,26 @@ public class MantraMeWidget extends AppWidgetProvider {
 
 		switch (styleNumber){
 		case 0 :
-			view.setImageViewResource(R.id.backgroundImage, R.drawable.background0);			
+			view.setImageViewResource(R.id.backgroundImage, R.drawable.background0);
 			break;
 		case 1 :
-			view.setImageViewResource(R.id.backgroundImage, R.drawable.background1);			
+			view.setImageViewResource(R.id.backgroundImage, R.drawable.background1);	
 			break;
 		case 2 :
-			view.setImageViewResource(R.id.backgroundImage, R.drawable.background2);			
+			view.setImageViewResource(R.id.backgroundImage, R.drawable.background2);
 			break;
 		case 3 :
-			view.setImageViewResource(R.id.backgroundImage, R.drawable.background3);			
+			view.setImageViewResource(R.id.backgroundImage, R.drawable.background3);
 			break;
 		case 4 :
-			view.setImageViewResource(R.id.backgroundImage, R.drawable.background4);			
+			view.setImageViewResource(R.id.backgroundImage, R.drawable.background4);
 			break;
 		case 5 :
-			view.setImageViewResource(R.id.backgroundImage, R.drawable.background5);			
+			view.setImageViewResource(R.id.backgroundImage, R.drawable.background5);
 			break;
 		default: 
 			view.setImageViewResource(R.id.backgroundImage, R.drawable.background0);			
 			break;
 		}
 	}
-
 }

@@ -6,6 +6,7 @@ import MantraMeClasses.Mantra;
 import MantraMeClasses.MantraGetter;
 import android.os.Bundle;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Context;
@@ -37,7 +38,19 @@ public class Options extends Activity {
 	}
 
 	public void nextMantraClicked(View view) {	
-		MantraGetter.next();
+		boolean succsess = MantraGetter.next();
+
+		if (!succsess){
+			Toast.makeText(Options.this, "No Matra Changed", Toast.LENGTH_LONG).show();
+		}
+		else{
+			/*
+			MantraGetter getter = new MantraGetter();
+			getter.getAllMantrasFromServer();
+			getter.next();
+			 */
+		}
+		
 		Mantra mantra = MantraGetter.getCurrentMantra();	
 
 		updateMantraText(mantra);
@@ -46,8 +59,8 @@ public class Options extends Activity {
 		AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
 		RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widgetlayout);
 		ComponentName thisWidget = new ComponentName(context, MantraMeWidget.class);
-		remoteViews.setTextViewText(R.id.textViewMantraShown, mantra.man_str);
-		remoteViews.setTextViewText(R.id.textViewAutorInWidget, mantra.author);
+		remoteViews.setTextViewText(R.id.textViewMantraShown, mantra.Description);
+		remoteViews.setTextViewText(R.id.textViewAutorInWidget, mantra.Author);
 
 		MantraMeWidget.checkStyle(mantra, remoteViews);
 
@@ -63,11 +76,16 @@ public class Options extends Activity {
 		 */
 	}
 
-	public void refreshMantrasFromServer(View view) {			
+	public void refreshMantrasFromServer(View view) {	
+
+		ProgressDialog dialog = ProgressDialog.show(Options.this, "", "Loading...", true);
 
 		MantraGetter getter = new MantraGetter();
 		getter.getAllMantrasFromServer();		
 
+		dialog.dismiss();
+
+		Toast.makeText(Options.this, "Matras updated", Toast.LENGTH_LONG).show();
 	}
 
 	public void okClicked(View view) {	
@@ -92,8 +110,6 @@ public class Options extends Activity {
 
 	private void updateMantraText(Mantra mantra) {
 		TextView mantraText = (TextView) findViewById(R.id.optionsTextViewMantraShown);		
-		if (mantra != null)	mantraText.setText(mantra.man_str);
+		if (mantra != null)	mantraText.setText(mantra.Description);
 	}
-
-
 }

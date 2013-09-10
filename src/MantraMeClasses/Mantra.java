@@ -1,23 +1,22 @@
 package MantraMeClasses;
 
-
 import java.util.Date;
 
 public class Mantra {
-	public String man_str;
-	public Date creationDate;
-	public String author;
-	public String mantra_id;
+	public String Description;
+	public Date CreationDate;
+	public String Author;
+	public String Id;
 	public int ReleventSport;
 	public int ReleventEducation;
 	public int ReleventNewAge;
 	public int ReleventHealth;
 
 	public Mantra(){
-		this.man_str = "";
-		this.creationDate = new Date();
-		this.author = "";
-		this.mantra_id = "-1";
+		this.Description = "";
+		this.CreationDate = new Date();
+		this.Author = "";
+		this.Id = "-1";
 		ReleventSport = 50;
 		ReleventEducation = 50;
 		ReleventNewAge = 50;
@@ -25,10 +24,10 @@ public class Mantra {
 	}
 
 	public Mantra(String mantra, String author, String id){
-		this.man_str = mantra;
-		this.creationDate = new Date();
-		this.author = author;
-		this.mantra_id = id;
+		this.Description = mantra;
+		this.CreationDate = new Date();
+		this.Author = author;
+		this.Id = id;
 		ReleventSport = 50;
 		ReleventEducation = 50;
 		ReleventNewAge = 50;
@@ -36,7 +35,7 @@ public class Mantra {
 	}
 	
 	public void SetCreationDate(Date date){
-		this.creationDate = date;		
+		this.CreationDate = date;		
 	}
 
 	public void SetRelevents(int sport, int education, int newAge, int health){
@@ -47,11 +46,10 @@ public class Mantra {
 	}
 
 	public String toString(){
-		String ans = "\n[Mantra id : " + this.mantra_id+ " ,";
-		ans += "man_str : " + this.man_str + " ,";
-		ans += "Mantra creation Date : " + this.creationDate.toString() + " ,";
-		ans += "Mantra Name : " + this.author + " ,";
-
+		String ans = "\n[Mantra id : " + this.Id+ " ,";
+		ans += "man_str : " + this.Description + " ,";
+		ans += "Mantra creation Date : " + this.CreationDate.toString() + " ,";
+		ans += "Mantra Name : " + this.Author + " ,";
 		ans += "ReleventSport : " + this.ReleventSport + " ,";
 		ans += "ReleventEducation : " + this.ReleventEducation + " ,";
 		ans += "ReleventNewAge : " + this.ReleventNewAge + " ,";
@@ -59,4 +57,5 @@ public class Mantra {
 
 		return ans;			
 	}
+	
 }

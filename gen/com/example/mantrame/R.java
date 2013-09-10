@@ -27,10 +27,9 @@ public final class R {
         public static final int background3=0x7f020003;
         public static final int background4=0x7f020004;
         public static final int background5=0x7f020005;
-        public static final int download=0x7f020006;
-        public static final int ic_launcher=0x7f020007;
-        public static final int logo=0x7f020008;
-        public static final int white=0x7f020009;
+        public static final int icon=0x7f020006;
+        public static final int logo=0x7f020007;
+        public static final int white=0x7f020008;
     }
     public static final class id {
         public static final int action_forgot_password=0x7f090020;

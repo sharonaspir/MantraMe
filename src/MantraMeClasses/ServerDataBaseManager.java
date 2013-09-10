@@ -78,7 +78,7 @@ public class ServerDataBaseManager{
 
 		try {
 			String msg = json.getString(TAG_MESSAGE);
-			Log.w("GetUserFromJson()", "msg " + msg);
+			//Log.w("GetUserFromJson()", "msg " + msg);
 			JSONObject msgAsJson = new JSONObject(msg);
 
 			String name = msgAsJson.getString("Name");			
@@ -91,7 +91,6 @@ public class ServerDataBaseManager{
 
 			UserProfile user = new UserProfile(name, email, id);
 			user.SetInterst(education, newAge, sport, health);
-			Log.w("GetUserFromJson()", "user " + user.toString());
 			return user;
 		} catch (JSONException e) {
 			Log.w("GetUserFromJson Exception 111111111111!", e);
@@ -179,14 +178,14 @@ public class ServerDataBaseManager{
 			}
 
 			// check your log for json response
-			Log.d("UserProfile.getAllMantras()", json.toString());
+			//Log.d("UserProfile.getAllMantras()", json.toString());
 
 			success = json.getInt(TAG_SUCCESS);			
 
 			if (success == 1) {				
-				//UserProfile user = GetUserFromJson(json);
 				String msg = json.getString(TAG_MESSAGE);
-				Log.w("GetUserFromJson()", "msg " + msg);
+				
+				//Log.w("GetUserFromJson()", "msg " + msg);
 
 				String[] mantrasStr = msg.split(" , ");
 				for(String man : mantrasStr){
@@ -199,7 +198,9 @@ public class ServerDataBaseManager{
 				}
 
 			}else{
-				Log.d("UserProfile.getAllMantras()", json.getString(TAG_MESSAGE));				
+				// Failed reading mantras
+				
+				//Log.d("UserProfile.getAllMantras()", json.getString(TAG_MESSAGE));				
 				//String n = json.getString("Name");		
 
 				return null;
@@ -214,7 +215,7 @@ public class ServerDataBaseManager{
 		return mantras;		
 	}
 
-	private static Mantra getMantraFromJson(JSONObject msgAsJson){
+	public static Mantra getMantraFromJson(JSONObject msgAsJson){
 
 		Mantra mantra = null;
 
