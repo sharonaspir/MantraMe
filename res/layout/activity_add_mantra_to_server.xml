@@ -1,0 +1,129 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context=".AddMantraToServer" >
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <TextView
+            android:layout_width="296dp"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="Enter the mantra"
+            android:textColor="@android:color/holo_blue_dark"
+            android:textSize="15sp" />
+        
+        <EditText
+            android:id="@+id/addMantraDesc"
+            android:layout_width="match_parent"
+            android:layout_height="80sp"
+            android:ems="10"
+            android:inputType="textMultiLine" >
+        </EditText>
+        
+        <TextView
+            android:layout_width="296dp"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:text="Author name"
+            android:textColor="@android:color/holo_blue_dark"
+            android:textSize="15sp" />
+        
+        <EditText
+            android:id="@+id/addMantraAuthor"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:ems="10"
+            android:inputType="textPersonName" >
+        </EditText>
+
+        <TextView
+            android:layout_width="296dp"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:text="Rate the mantra"
+            android:textColor="@android:color/holo_blue_dark"
+            android:textSize="13sp" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="Sport"
+            android:textColor="@android:color/holo_orange_dark"
+            android:textSize="10sp" />
+
+        <SeekBar
+            android:id="@+id/seekBarMantraSport"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:progress="50" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="Health"
+            android:textColor="@android:color/holo_orange_dark"
+            android:textSize="10sp" />
+
+        <SeekBar
+            android:id="@+id/seekBarMantraHealth"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:progress="50" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="Education"
+            android:textColor="@android:color/holo_orange_dark"
+            android:textSize="10sp" />
+
+        <SeekBar
+            android:id="@+id/seekBarMantraEducation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:progress="50" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="New Age"
+            android:textColor="@android:color/holo_orange_dark"
+            android:textSize="10sp" />
+
+        <SeekBar
+            android:id="@+id/seekBarMantraNewAge"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:progress="50" />
+    </LinearLayout>
+    
+    <Button
+        android:id="@+id/buttonAddMantraDone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:background="@android:color/holo_blue_light"
+        android:gravity="center"
+        android:onClick="doneAddingMantraClicked"
+        android:text="Done"
+        android:textColor="@android:color/white" />
+
+</RelativeLayout>

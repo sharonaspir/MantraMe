@@ -12,7 +12,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.mantrame.R;
+import com.Sharon.MantraMeWidget.R;
 
 public class AddNewUser extends Activity{
 

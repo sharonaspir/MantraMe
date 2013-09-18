@@ -12,15 +12,17 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.R.string;
 import android.util.Log;
 
 public class ServerDataBaseManager{
 
 	static JSONParser jsonParser = new JSONParser();
-	public static final String SERVER_IP 			= "10.0.0.10";
-	public static final String URL_ADDUSER 		= "http://" + SERVER_IP + "/MyMantra/addUser.php";
+	public static final String SERVER_IP 			= "192.168.1.68";
+	public static final String URL_ADDUSER 			= "http://" + SERVER_IP + "/MyMantra/addUser.php";
 	public static final String URL_LOGIN			= "http://" + SERVER_IP + "/MyMantra/getUserByEMailAndPassword.php";
 	public static final String URL_GETALLMANTRAS 	= "http://" + SERVER_IP + "/MyMantra/getAllMantras.php";
+	public static final String URL_ADDMANTRA 		= "http://" + SERVER_IP + "/MyMantra/addMantra.php";
 
 	public static final String TAG_SUCCESS = "success";
 	public static final String TAG_MESSAGE = "message";
@@ -100,9 +102,9 @@ public class ServerDataBaseManager{
 	}
 
 	public static String addUser(UserProfile user){		
-		
+
 		Log.d("addUser", user.toString());
-		
+
 		if (user == null){
 			return "null";
 		}
@@ -112,7 +114,7 @@ public class ServerDataBaseManager{
 		try {
 			// Building Parameters
 			List<NameValuePair> params = new ArrayList<NameValuePair>();
-			
+
 			UUID id = UUID.randomUUID();
 			params.add(new BasicNameValuePair("id", id.toString()));
 			params.add(new BasicNameValuePair("username", user.name));
@@ -151,7 +153,52 @@ public class ServerDataBaseManager{
 	}
 
 	// MANATRAS
-	public static void addMantra(Mantra mantra){
+	public static String addMantra(Mantra mantra){
+
+		if (mantra == null){
+			return null;
+		}
+		
+		int success;
+		
+		try {
+			// Building Parameters
+			List<NameValuePair> params = new ArrayList<NameValuePair>();
+			
+			params.add(new BasicNameValuePair("id", 			mantra.Id));
+			params.add(new BasicNameValuePair("Author", 		mantra.Author));
+			params.add(new BasicNameValuePair("Description", 	mantra.Description));
+			params.add(new BasicNameValuePair("sport", 			""+ mantra.ReleventSport));
+			params.add(new BasicNameValuePair("education", 		""+ mantra.ReleventEducation));
+			params.add(new BasicNameValuePair("newage", 		""+ mantra.ReleventNewAge));
+			params.add(new BasicNameValuePair("health", 		""+ mantra.ReleventHealth));
+			params.add(new BasicNameValuePair("date", 			mantra.CreationDate.toString()));
+			
+			
+			Log.d("request!", "addMantra starting");
+			
+			// getting product details by making HTTP request
+			JSONObject json = jsonParser.makeHttpRequest(URL_ADDMANTRA, "POST", params);
+
+			Log.d("Login attempt", json.toString());
+
+			// json success tag
+			success = json.getInt(TAG_SUCCESS);
+			
+			if (success == 1) {
+				Log.d("Login Successful!", json.toString());
+				return json.getString(TAG_MESSAGE);				
+			}else{
+				Log.d("Login Failure!", json.getString(TAG_MESSAGE));				
+
+				return json.getString(TAG_MESSAGE);
+			}
+			
+		}
+		catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return null;
 
 	}
 
@@ -184,7 +231,7 @@ public class ServerDataBaseManager{
 
 			if (success == 1) {				
 				String msg = json.getString(TAG_MESSAGE);
-				
+
 				//Log.w("GetUserFromJson()", "msg " + msg);
 
 				String[] mantrasStr = msg.split(" , ");
@@ -199,7 +246,7 @@ public class ServerDataBaseManager{
 
 			}else{
 				// Failed reading mantras
-				
+
 				//Log.d("UserProfile.getAllMantras()", json.getString(TAG_MESSAGE));				
 				//String n = json.getString("Name");		
 
@@ -255,5 +302,5 @@ public class ServerDataBaseManager{
 
 		return mantra;
 	}	
-			
+
 }

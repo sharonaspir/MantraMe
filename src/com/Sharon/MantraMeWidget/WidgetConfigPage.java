@@ -29,7 +29,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.mantrame.R;
+import com.Sharon.MantraMeWidget.R;
 
 public class WidgetConfigPage extends Activity {
 
@@ -43,25 +43,11 @@ public class WidgetConfigPage extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+
+		init();
+
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.widgetconfigpage);
-		
-		// Set context
-		context = WidgetConfigPage.this;
-		
-		MantraGetter.context = context;
-
-		// Get and Set the widget id
-		Intent i = getIntent();
-		Bundle extras = i.getExtras();
-		if (extras != null) {
-			mAppWidgetId = extras.getInt(
-					AppWidgetManager.EXTRA_APPWIDGET_ID,
-					AppWidgetManager.INVALID_APPWIDGET_ID);
-		}
-
-		// Set AppWidgetManager
-		awm = AppWidgetManager.getInstance(context);
 	}
 
 	@Override
@@ -93,16 +79,16 @@ public class WidgetConfigPage extends Activity {
 
 
 	public void onAnonymousClicked(View view){
-		
+
 		//ProgressDialog dialog = ProgressDialog.show(WidgetConfigPage.this, "", "Loading...", true);
-		
+
 		UserProfile.userProfileUsed = null;	
 
 		updateMantras();
-		
+
 		end();
 	}
-	
+
 	public void onLoginRegisteredUserClicked(View view){
 
 		String mail = ((EditText) findViewById(R.id.user_mail)).getText().toString();
@@ -112,11 +98,11 @@ public class WidgetConfigPage extends Activity {
 			Toast.makeText(WidgetConfigPage.this, "Enter email and password", Toast.LENGTH_LONG).show();
 			return;
 		}		
-		
+
 		Log.w("WidgetConfigPage" , "onLoginRegisteredUserClicked mail " + mail + " pass " + pass);
 
 		UserProfile user = getUserByMailPass(mail, pass);
-		
+
 		if (user == null){
 			Toast.makeText(WidgetConfigPage.this, "Failed to login", Toast.LENGTH_LONG).show();
 			((EditText) findViewById(R.id.user_mail)).setText("");
@@ -124,7 +110,7 @@ public class WidgetConfigPage extends Activity {
 		}else{	
 
 			Log.w("WidgetConfigPage" , "user " + user.toString());
-			
+
 			// Set our user
 			UserProfile.userProfileUsed = user;	
 			updateMantras();
@@ -141,13 +127,13 @@ public class WidgetConfigPage extends Activity {
 			ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);		
 			MantraGetter getter = new MantraGetter();
 			getter.connectivityManager = cm;		
-			getter.getAllMantrasFromServer();
+			getter.getAllMantrasFromServer(context);
 		}else{
 			Log.w("updateMantras" , "Not first Run");
 		}
-			
+
 	}
-	
+
 	public void end(){
 		// Update the widget info
 		Intent updateWidget = new Intent(getApplicationContext(), MantraMeWidget.class);
@@ -210,11 +196,11 @@ public class WidgetConfigPage extends Activity {
 
 		protected String doInBackground(String... args) {
 			Log.w("LoginUser" , "doInBackground");
-			
+
 			if (!isURLReachable(context, ServerDataBaseManager.URL_LOGIN)){
 				return null;
 			}			
-			
+
 			user = ServerDataBaseManager.getUser(mail, password);
 			if (user == null) return "null";
 			return user.toString();
@@ -263,6 +249,23 @@ public class WidgetConfigPage extends Activity {
 			}
 			return false;
 		}
+	}
+
+	public void init(){
+		// Set context
+		context = WidgetConfigPage.this;
+		
+		// Get and Set the widget id
+		Intent i = getIntent();
+		Bundle extras = i.getExtras();
+		if (extras != null) {
+			mAppWidgetId = extras.getInt(
+					AppWidgetManager.EXTRA_APPWIDGET_ID,
+					AppWidgetManager.INVALID_APPWIDGET_ID);
+		}
+
+		// Set AppWidgetManager
+		awm = AppWidgetManager.getInstance(context);
 	}
 }
 

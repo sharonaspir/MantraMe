@@ -1,6 +1,6 @@
 package com.Sharon.MantraMeWidget;
 
-import com.example.mantrame.R;
+import com.Sharon.MantraMeWidget.R;
 
 import MantraMeClasses.Mantra;
 import MantraMeClasses.MantraGetter;
@@ -10,6 +10,7 @@ import android.app.ProgressDialog;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -24,7 +25,7 @@ public class Options extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_options);
 
-		Mantra mantra = MantraGetter.getCurrentMantra();	
+		Mantra mantra = MantraGetter.getCurrentMantra(getBaseContext());	
 		if (mantra != null){
 			updateMantraText(mantra);	
 		}
@@ -38,7 +39,7 @@ public class Options extends Activity {
 	}
 
 	public void nextMantraClicked(View view) {	
-		boolean succsess = MantraGetter.next();
+		boolean succsess = MantraGetter.next(getBaseContext());
 
 		if (!succsess){
 			Toast.makeText(Options.this, "No Matra Changed", Toast.LENGTH_LONG).show();
@@ -49,22 +50,23 @@ public class Options extends Activity {
 			getter.getAllMantrasFromServer();
 			getter.next();
 			 */
+
+
+			Mantra mantra = MantraGetter.getCurrentMantra(getBaseContext());	
+
+			updateMantraText(mantra);
+
+			Context context = this;
+			AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+			RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widgetlayout);
+			ComponentName thisWidget = new ComponentName(context, MantraMeWidget.class);
+			remoteViews.setTextViewText(R.id.textViewMantraShown, mantra.Description);
+			remoteViews.setTextViewText(R.id.textViewAutorInWidget, mantra.Author);
+
+			MantraMeWidget.checkStyle(mantra, remoteViews);
+
+			appWidgetManager.updateAppWidget(thisWidget, remoteViews);
 		}
-		
-		Mantra mantra = MantraGetter.getCurrentMantra();	
-
-		updateMantraText(mantra);
-
-		Context context = this;
-		AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
-		RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widgetlayout);
-		ComponentName thisWidget = new ComponentName(context, MantraMeWidget.class);
-		remoteViews.setTextViewText(R.id.textViewMantraShown, mantra.Description);
-		remoteViews.setTextViewText(R.id.textViewAutorInWidget, mantra.Author);
-
-		MantraMeWidget.checkStyle(mantra, remoteViews);
-
-		appWidgetManager.updateAppWidget(thisWidget, remoteViews);
 
 
 		/*
@@ -81,7 +83,7 @@ public class Options extends Activity {
 		ProgressDialog dialog = ProgressDialog.show(Options.this, "", "Loading...", true);
 
 		MantraGetter getter = new MantraGetter();
-		getter.getAllMantrasFromServer();		
+		getter.getAllMantrasFromServer(getBaseContext());		
 
 		dialog.dismiss();
 
@@ -111,5 +113,16 @@ public class Options extends Activity {
 	private void updateMantraText(Mantra mantra) {
 		TextView mantraText = (TextView) findViewById(R.id.optionsTextViewMantraShown);		
 		if (mantra != null)	mantraText.setText(mantra.Description);
+	}
+
+	public void addMantraToServer(View view) {
+		try
+		{
+			Intent k = new Intent(getApplicationContext(), AddMantraToServer.class);
+			startActivity(k);
+			finish();
+		}catch(Exception e){
+			Log.w("WidgetConfigPage" , "Exception! \n" + e);
+		}	
 	}
 }

@@ -8,7 +8,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-import com.example.mantrame.R;
+import com.Sharon.MantraMeWidget.R;
 
 import MantraMeClasses.MantraGetter;
 import MantraMeClasses.ServerDataBaseManager;
@@ -108,14 +108,14 @@ public class NewUserRatings extends Activity {
 		ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);		
 		MantraGetter getter = new MantraGetter();
 		getter.connectivityManager = cm;		
-		getter.getAllMantrasFromServer();	
+		getter.getAllMantrasFromServer(getBaseContext());	
 	}
 	
 	private boolean addNewUserToServer(UserProfile user) {		
 		addNewUser action = new addNewUser();
 		action.usr = user;
-		action.execute();	
 		action.context = this;
+		action.execute();	
 
 		try {
 			action.get(10, TimeUnit.SECONDS);

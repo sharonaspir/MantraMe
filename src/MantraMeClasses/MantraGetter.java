@@ -21,6 +21,7 @@ import org.json.JSONObject;
 import com.google.gson.Gson;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -34,13 +35,13 @@ public class MantraGetter{
 	public final static String ALLMANTRASFILENAME = "AllMantrasFile.txt";
 	public final static String CURRENTMANTRASFILENAME = "CURRENTMANTRAS.txt";
 
-	public static Context context;
+	// public static Context context;
 	public static ConnectivityManager connectivityManager;
 
 	public MantraGetter(){				
 	}
 
-	public void getAllMantrasFromServer() {
+	public void getAllMantrasFromServer(Context context) {
 
 		Log.w("SHARON" , "getAllMantrasFromServer");
 
@@ -65,12 +66,22 @@ public class MantraGetter{
 			allMantras = action.mantras;
 
 			// Save the mantras to file
-			writeAllMantrasToFile(allMantras);
+			// 1111 writeAllMantrasToFile(allMantras, context);
 		}
 	}
 
-	private static void writeCurrentMantraToFile(Mantra man) {		
+	private static void writeCurrentMantraToFile(Mantra man,Context context) {		
 
+		String user = "currentUser";
+		SharedPreferences sharedPref = context.getSharedPreferences(user, Context.MODE_PRIVATE);
+		SharedPreferences.Editor editor = sharedPref.edit();
+		editor.putString("mantraDescription", man.Description);
+		editor.putString("mantraAuthor", man.Author);
+
+		editor.commit();
+		Log.w("SHARON" , "SharedPreferences editor.commit();");
+
+		/*
 		Log.w("SHARON" , "write Current Mantra To File");
 
 		String json = "";
@@ -79,46 +90,69 @@ public class MantraGetter{
 
 		writeToFile(json, CURRENTMANTRASFILENAME); 
 		Log.w("SHARON" , "write Current Mantra To File DONE");		
+		 */
 	}
 
-	private void writeAllMantrasToFile(List<Mantra> mantraList) {
+	private void writeAllMantrasToFile1111(List<Mantra> mantraList,Context context) {
 
-		Log.w("SHARON" , "writeAllMantrasToFile");
+		try{
+			Log.w("SHARON" , "writeAllMantrasToFile");
 
-		String allData = "";
-		for (Mantra m : mantraList) {		
-			String json = "";
+			String allData = "";
+			for (Mantra m : mantraList) {		
+				String json = "";
 
-			Gson gson = new Gson();
-			json = gson.toJson(m);
+				Gson gson = new Gson();
+				json = gson.toJson(m);
 
-			allData += json + "\n";
+				allData += json + "\n";
+			}
+
+			// 1111 writeToFile(allData, ALLMANTRASFILENAME,  context); 
+			Log.w("writeAllMantrasToFile" , "writeAllMantrasToFile DONE");
 		}
-
-		writeToFile(allData, ALLMANTRASFILENAME); 
-		Log.w("SHARON" , "writeAllMantrasToFile DONE");
+		catch(Exception e){
+			Log.w("writeAllMantrasToFile" , "Exception 2 : " + e);
+		}
 	}
 
-	private static void writeToFile(String allData, String fileName) {
+	private static void writeToFile1111(String allData, String fileName,Context context) {
 
 		if (context == null){
+			Log.w("SHARON" , "context == null 7 : "); 
 			return;
 		}
 
 		FileOutputStream fos;
 		try {
-			fos = context.openFileOutput(fileName, Context.MODE_PRIVATE);
+			fos = context.openFileOutput(fileName, Context.MODE_WORLD_READABLE);
 			fos.write(allData.getBytes());
 			fos.close();	
 		} catch (FileNotFoundException e) {
-			Log.w("SHARON" , "writeToFile Failed : "  + e);  
+			Log.w("SHARON" , "writeToFile Failed 3 : "  + e);  
 		} catch (IOException e) {
-			Log.w("SHARON" , "writeToFile Failed : "  + e);  
+			Log.w("SHARON" , "writeToFile Failed 4 : "  + e);  
 		}	
 	}
 
-	private static Mantra readCurrentMantraFromFile() {
+	private static Mantra readCurrentMantraFromFile1111(Context context) {
 
+		if (context == null){
+			return null;
+		}
+
+		String user = "currentUser";
+		SharedPreferences sharedPref = context.getSharedPreferences(user, Context.MODE_PRIVATE);
+		String desc = sharedPref.getString("mantraDescription", "No shared here 1");
+		String author =  sharedPref.getString("mantraAuthor", "No shared here 2");
+
+		Mantra current =  new Mantra(desc, author , "1");
+
+		Log.w("SHARON" , "SharedPreferences read , current : "  + current.toString());  	
+
+		return current;
+
+		/*
 		if (context == null){
 			return null;
 		}
@@ -155,19 +189,33 @@ public class MantraGetter{
 			}
 		}
 		return currentMantra;
+		 */
 	}
 
-	public static ArrayList<Mantra> readMantrasFromFile() {
+	public static ArrayList<Mantra> readMantrasFromFile1111(Context context) {
 
+		Log.w("readMantrasFromFile" , "Starting readMantrasFromFile");  
+		
+		ArrayList<Mantra> allMan = new ArrayList<Mantra>();	
+		
 		if (context == null){
-			return null;
-		}
-
-		ArrayList<Mantra> allMan = new ArrayList<Mantra>();		
+			Log.w("readMantrasFromFile" , "context == null in readMantrasFromFile");  
+			return allMan;
+		}	
 
 		FileInputStream fis = null;
+		
 		try {
+			Log.w("readMantrasFromFile" , "ALLMANTRASFILENAME =" + ALLMANTRASFILENAME);  
 			fis = context.openFileInput(ALLMANTRASFILENAME);
+			
+			Log.w("readMantrasFromFile" , "fis =" + fis);  
+			
+			if (fis == null){
+				Log.w("readMantrasFromFile" , "fis == null");  
+				return allMan;
+			}
+			
 			String collected = null;
 
 			byte[] data = new byte[fis.available()];
@@ -188,16 +236,15 @@ public class MantraGetter{
 					allMan.add(m);
 					Log.w("SHARON" , "readMantrasFromFile - mantra added = " + m.Description);  
 				} catch (JSONException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					Log.w("SHARON" , "JSONException 5 : " + e);
 				}
 			}
 
-		} catch (FileNotFoundException e) {
-			Log.w("SHARON" , "writeToFile Failed : "  + e);  
-		} catch (IOException e) {
-			Log.w("SHARON" , "writeToFile Failed : "  + e);  
-		}	
+		} 
+		catch (Exception e){
+			Log.w("SHARON" , "Exception 1 : " + e); 
+			allMan = new ArrayList<Mantra>();
+		}
 		finally{
 			try {
 				fis.close();
@@ -210,16 +257,17 @@ public class MantraGetter{
 		return allMan;
 	}
 
-	public static Boolean next(){
-		
+	public static Boolean next(Context context){
+
 		Log.w("SHARON" , "MangtraGetter.next()");
-		
+
 		if (allMantras == null || allMantras.size() == 0){
 
 			Log.w("SHARON" , "allMantras == null");
 
 			// Try re-reading the mantras from file
-			allMantras = readMantrasFromFile();
+			
+			// 1111 allMantras = readMantrasFromFile(context);
 
 			if (allMantras == null || allMantras.size() == 0){
 				Log.w("SHARON" , "allMantras == null , after file read");
@@ -237,9 +285,9 @@ public class MantraGetter{
 		}
 		else{
 			while ((man == null || man.Id.equals(currentMantra.Id)) && count++ < 100){
-				
+
 				Log.w("SHARON" , "MangtraGetter.next() getting new mantra");
-				
+
 				int indexRandom = r.nextInt(allMantras.size());
 				man = allMantras.get(indexRandom);
 			}
@@ -248,19 +296,18 @@ public class MantraGetter{
 		currentMantra = man;
 
 		// write mantra to file
-		writeCurrentMantraToFile(man);
+		writeCurrentMantraToFile(man,context);
 
 		return true;
 	}
 
-
-	public static Mantra getCurrentMantra(){
+	public static Mantra getCurrentMantra(Context context){
 
 		Log.w("SHARON" , "getCurrentMantra");
 
 		if (currentMantra == null){
 
-			currentMantra = readCurrentMantraFromFile();
+		// 1111	currentMantra = readCurrentMantraFromFile( context);
 			if (currentMantra == null){
 
 				Log.w("SHARON" , "currentMantra == null");

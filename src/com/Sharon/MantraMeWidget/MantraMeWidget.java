@@ -17,7 +17,7 @@ import android.util.TypedValue;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 
-import com.example.mantrame.R;
+import com.Sharon.MantraMeWidget.R;
 
 public class MantraMeWidget extends AppWidgetProvider {
 
@@ -26,7 +26,7 @@ public class MantraMeWidget extends AppWidgetProvider {
 
 	public void onUpdate(Context context, AppWidgetManager appWidgetManager,int[] appWidgetIds) {
 
-		Log.w("33333333333", "onUpdate");
+		Log.w("MantraMeWidget", "onUpdate");
 
 		final int N = appWidgetIds.length;
 		super.onUpdate(context, appWidgetManager, appWidgetIds);
@@ -36,12 +36,12 @@ public class MantraMeWidget extends AppWidgetProvider {
 		for (int i=0; i<N; i++) {						
 			int appWidgetId = appWidgetIds[i];			
 
-			Log.w("SHARON", "i = " + i + " .appWidgetId = " + appWidgetId);
+			Log.w("MantraMeWidget", "i = " + i + " .appWidgetId = " + appWidgetId);
 
 			RemoteViews view = new RemoteViews(context.getPackageName(), R.layout.widgetlayout);
 
-			MantraGetter.next();
-			Mantra mantra = MantraGetter.getCurrentMantra();
+			MantraGetter.next(context);
+			Mantra mantra = MantraGetter.getCurrentMantra(context);
 
 			if (mantra != null){
 				view.setTextViewText(R.id.textViewMantraShown, mantra.Description);
@@ -130,5 +130,9 @@ public class MantraMeWidget extends AppWidgetProvider {
 			view.setImageViewResource(R.id.backgroundImage, R.drawable.background0);			
 			break;
 		}
+	}
+
+	private void init(){
+		
 	}
 }

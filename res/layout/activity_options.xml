@@ -52,6 +52,20 @@
         </TableRow>
 
         <TableRow
+            android:id="@+id/tableRow14"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:paddingTop="12sp" >
+
+            <Button
+                android:id="@+id/buttonOptionsAddMantraToServer"
+                android:background="#9933b5e5"
+                android:onClick="addMantraToServer"
+                android:text="Add new mantra to server"
+                android:textColor="@android:color/white" />
+        </TableRow>
+
+        <TableRow
             android:id="@+id/tableRow4"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
@@ -59,7 +73,7 @@
 
             <Button
                 android:id="@+id/buttonOptionsReTake"
-                android:background="@android:color/holo_blue_light"
+                android:background="#9933b5e5"
                 android:onClick="refreshMantrasFromServer"
                 android:text="Refresh Mantras from server"
                 android:textColor="@android:color/white" />
@@ -89,6 +103,5 @@
         android:contentDescription="@string/hello_world"
         android:gravity="center_horizontal"
         android:src="@drawable/logo" />
-
 
 </RelativeLayout>
