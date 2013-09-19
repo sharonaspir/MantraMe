@@ -1,6 +1,5 @@
 package MantraMeClasses;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
@@ -12,7 +11,6 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.R.string;
 import android.util.Log;
 
 public class ServerDataBaseManager{
@@ -32,7 +30,7 @@ public class ServerDataBaseManager{
 	// Gets the user saved on the sql server, with mail and password as inputed
 	public static UserProfile getUser(String mail, String password){
 
-		Log.w("UserProfile.getUser()" , "mail " + mail + " pass " + password);
+		Log.w("ServerDataBaseManager" , "mail " + mail + " pass " + password);
 
 		if ( password.equals("") || password.equals("")){
 			return null;
@@ -45,12 +43,12 @@ public class ServerDataBaseManager{
 			params.add(new BasicNameValuePair("password", password));
 			params.add(new BasicNameValuePair("email", mail));
 
-			Log.d("UserProfile.getUser()", "getUser starting , " + URL_LOGIN);
+			Log.d("ServerDataBaseManager", "getUser starting , " + URL_LOGIN);
 			// getting product details by making HTTP request
 			JSONObject json = jsonParser.makeHttpRequest(URL_LOGIN, "POST", params);
 
 			// check your log for json response
-			Log.d("UserProfile.getUser()", json.toString());
+			Log.d("ServerDataBaseManager", json.toString());
 
 			success = json.getInt(TAG_SUCCESS);			
 
@@ -59,16 +57,16 @@ public class ServerDataBaseManager{
 
 				return user;				
 			}else{
-				Log.d("UserProfile.getUser()", json.getString(TAG_MESSAGE));				
+				Log.d("ServerDataBaseManager", json.getString(TAG_MESSAGE));				
 
 				//String n = json.getString("Name");		
 
 				return null;
 			}
 		} catch (JSONException e) {
-			e.printStackTrace();
+			Log.wtf("ServerDataBaseManager", "JSONException " + e);
 		} catch (Exception e) {
-			Log.w("UserProfile.getUser()", "Exception\n" + e);
+			Log.wtf("ServerDataBaseManager", "Exception\n" + e);
 		}
 
 		return null;		
@@ -76,7 +74,7 @@ public class ServerDataBaseManager{
 
 	// Gets a UserProfile from user info containing json
 	private static UserProfile GetUserFromJson(JSONObject json) {
-		Log.w("GetUserFromJson()", "starting GetUserFromJson");
+		Log.w("ServerDataBaseManager", "starting GetUserFromJson");
 
 		try {
 			String msg = json.getString(TAG_MESSAGE);
@@ -95,7 +93,7 @@ public class ServerDataBaseManager{
 			user.SetInterst(education, newAge, sport, health);
 			return user;
 		} catch (JSONException e) {
-			Log.w("GetUserFromJson Exception 111111111111!", e);
+			Log.wtf("ServerDataBaseManager", "JSONException, " + e);
 		}
 
 		return null;
@@ -103,7 +101,7 @@ public class ServerDataBaseManager{
 
 	public static String addUser(UserProfile user){		
 
-		Log.d("addUser", user.toString());
+		Log.d("ServerDataBaseManager", user.toString());
 
 		if (user == null){
 			return "null";
@@ -125,20 +123,20 @@ public class ServerDataBaseManager{
 			params.add(new BasicNameValuePair("sport", ""+ user.intrestSport));
 			params.add(new BasicNameValuePair("health", ""+ user.intrestHealth));
 
-			Log.d("request!", "addUser starting");
+			Log.d("ServerDataBaseManager", "addUser starting");
 			// getting product details by making HTTP request
 			JSONObject json = jsonParser.makeHttpRequest(URL_ADDUSER, "POST", params);
 
 			// check your log for json response
-			Log.d("Login attempt", json.toString());
+			Log.d("ServerDataBaseManager","Login attempt : " + json.toString());
 
 			// json success tag
 			success = json.getInt(TAG_SUCCESS);
 			if (success == 1) {
-				Log.d("Login Successful!", json.toString());
+				Log.d("ServerDataBaseManager", json.toString());
 				return json.getString(TAG_MESSAGE);				
 			}else{
-				Log.d("Login Failure!", json.getString(TAG_MESSAGE));				
+				Log.d("ServerDataBaseManager", json.getString(TAG_MESSAGE));				
 
 				return json.getString(TAG_MESSAGE);
 			}
@@ -172,31 +170,31 @@ public class ServerDataBaseManager{
 			params.add(new BasicNameValuePair("education", 		""+ mantra.ReleventEducation));
 			params.add(new BasicNameValuePair("newage", 		""+ mantra.ReleventNewAge));
 			params.add(new BasicNameValuePair("health", 		""+ mantra.ReleventHealth));
-			params.add(new BasicNameValuePair("date", 			mantra.CreationDate.toString()));
+			params.add(new BasicNameValuePair("date", 			mantra.getCreationDateInFormat()));
 			
 			
-			Log.d("request!", "addMantra starting");
+			Log.d("ServerDataBaseManager", "addMantra starting");
 			
 			// getting product details by making HTTP request
 			JSONObject json = jsonParser.makeHttpRequest(URL_ADDMANTRA, "POST", params);
 
-			Log.d("Login attempt", json.toString());
+			Log.d("ServerDataBaseManager", json.toString());
 
 			// json success tag
 			success = json.getInt(TAG_SUCCESS);
 			
 			if (success == 1) {
-				Log.d("Login Successful!", json.toString());
+				Log.d("ServerDataBaseManager", json.toString());
 				return json.getString(TAG_MESSAGE);				
 			}else{
-				Log.d("Login Failure!", json.getString(TAG_MESSAGE));				
+				Log.d("ServerDataBaseManager", json.getString(TAG_MESSAGE));				
 
 				return json.getString(TAG_MESSAGE);
 			}
 			
 		}
 		catch (JSONException e) {
-			e.printStackTrace();
+			Log.w("ServerDataBaseManager" , "JSONException, " + e);
 		}
 		return null;
 
@@ -206,7 +204,7 @@ public class ServerDataBaseManager{
 
 		List<Mantra> mantras = new LinkedList<Mantra>();
 
-		Log.w("UserProfile.getAllMantras()" , "Starting");
+		Log.w("ServerDataBaseManager" , "Starting");
 
 		int success;
 
@@ -219,9 +217,9 @@ public class ServerDataBaseManager{
 			JSONObject json = jsonParser.makeHttpRequest(URL_GETALLMANTRAS, "POST", params);
 
 			if (json == null){
-				Log.d("UserProfile.getAllMantras()", "null");				
+				Log.d("ServerDataBaseManager", "null");				
 			}else{
-				Log.d("UserProfile.getAllMantras()", "NOT null");			
+				Log.d("ServerDataBaseManager", "NOT null");			
 			}
 
 			// check your log for json response
@@ -253,10 +251,9 @@ public class ServerDataBaseManager{
 				return null;
 			}
 		} catch (JSONException e) {
-			Log.w("UserProfile.getAllMantras()", "JSONException \n" + e);
-			e.printStackTrace();
+			Log.wtf("ServerDataBaseManager", "JSONException \n" + e);
 		} catch (Exception e) {
-			Log.w("UserProfile.getAllMantras()", "Exception \n" + e);
+			Log.wtf("ServerDataBaseManager", "Exception \n" + e);
 		}
 
 		return mantras;		
@@ -282,12 +279,11 @@ public class ServerDataBaseManager{
 			Date date = null; 
 			try 
 			{  
-				SimpleDateFormat formatter; 					      
-				formatter = new SimpleDateFormat("MM/dd/yyyy");
-				date = (Date)formatter.parse(creationDate);  
+				date = Mantra.mantraDateFormat.parse(creationDate);  
 			} 
 			catch (Exception e)
 			{
+				Log.wtf("ServerDataBaseManager", "Exception \n" + e);
 				date = null; 
 			}
 
@@ -296,7 +292,7 @@ public class ServerDataBaseManager{
 			}
 
 		} catch (JSONException e1) {
-			e1.printStackTrace();
+			Log.wtf("ServerDataBaseManager", "JSONException \n" + e1);
 			mantra = null;
 		}
 

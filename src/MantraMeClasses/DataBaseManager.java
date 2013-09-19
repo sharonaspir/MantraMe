@@ -3,18 +3,14 @@
 package MantraMeClasses;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
-import android.R.string;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.text.format.DateFormat;
 import android.util.Log;
-
 
 public class DataBaseManager {
 
@@ -49,15 +45,25 @@ public class DataBaseManager {
 
 		Log.w("DataBaseManager", "Cursor c");
 
-		for (c.moveToFirst(); !c.isAfterLast() ; c.moveToNext() ){
+		for (c.moveToFirst(); !c.isAfterLast() ;  ){
 			Mantra m = GetMantraFromCursor(c);
 			Log.w("DataBaseManager", "GetMantraFromCursor man = " + m.toString());
+			tbls.close();
 			return m;
 		}
 
+		tbls.close();
 		return null;	
 	}
 
+	public void deleteAllMantras(){
+
+		SQLiteDatabase tbls = db.getReadableDatabase();	
+		tbls.execSQL("delete from "+ DataBaseHelper.tableName);
+
+		tbls.close();
+
+	}
 
 	public List<Mantra> GetAllMantra(){
 
@@ -82,6 +88,9 @@ public class DataBaseManager {
 			allMantras.add(m);
 		}		
 
+
+		tbls.close();
+
 		return allMantras;
 	}
 
@@ -95,29 +104,33 @@ public class DataBaseManager {
 
 	public boolean AddMantra(Mantra mantra){
 
+		SQLiteDatabase tbls = db.getWritableDatabase();	
+
 		try {
 			String sql = 
 					"INSERT INTO " + DataBaseHelper.tableName +
-					" VALUES (" + 				
-					"'" +  mantra.Id 			+ "'" 	+ ", " +
-					"'" + mantra.Description 	+ "'" 	+ ", " +
-					"'" + mantra.Author 		+ "'" 	+ ", " +
-					mantra.ReleventSport 				+ ", " +
-					mantra.ReleventEducation 			+ ", " +
-					mantra.ReleventNewAge 				+ ", " +	
-					mantra.ReleventHealth 				+ ", " +
-					"'" + mantra.CreationDate 	+ "'" 	+ ", " +
-					"datetime()" 						+ ")";
+					" VALUES " 									+"(" + 				
+					"'" +  mantra.Id 					+ "'" 	+ ", " +
+					"'" + mantra.Description 			+ "'" 	+ ", " +
+					"'" + mantra.Author 				+ "'" 	+ ", " +
+					mantra.ReleventSport 						+ ", " +
+					mantra.ReleventEducation 					+ ", " +
+					mantra.ReleventNewAge 						+ ", " +	
+					mantra.ReleventHealth 						+ ", " +
+					"'" + mantra.getCreationDateInFormat() 		+ "'" 	+ ", " +
+					"datetime()" 								+ ")";
 
 			Log.w("DataBaseManager", "AddMantra sql : " + sql);
 
-			SQLiteDatabase tbls = db.getWritableDatabase();	
 			tbls.execSQL(sql);
 		}
 		catch(Exception e){
-			Log.w("DataBaseManager", "Exception in AddMantra sql : " + e);
+			Log.wtf("DataBaseManager", "Exception in AddMantra sql : " + e);
+
+			tbls.close();
 			return false;
 		}
+		tbls.close();
 		return true;
 	}
 
@@ -143,19 +156,18 @@ public class DataBaseManager {
 
 			String date = c.getString(7); 
 
-			SimpleDateFormat df = new SimpleDateFormat("mm/dd/yyyy");
 			Date startDate;
 			try {
-				startDate = df.parse(date);
+				startDate = Mantra.mantraDateFormat.parse(date);
 				m.SetCreationDate(startDate);
 			} catch (ParseException e) {
-				Log.w("DataBaseManager", "ParseException + " + e);
+				Log.wtf("DataBaseManager", "ParseException + " + e);
 			}
 
 			Log.w("DataBaseManager", m.toString());
 		}
 		catch (Exception e){
-			Log.w("DataBaseManager", "Exception + " + e);
+			Log.wtf("DataBaseManager", "Exception + " + e);
 			return null;
 		}
 

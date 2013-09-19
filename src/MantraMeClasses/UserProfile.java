@@ -7,7 +7,7 @@ import java.util.UUID;
 
 public class UserProfile {
 	
-	public static UserProfile userProfileUsed = null;
+	private static UserProfile userProfileUsed = null;
 	
 	private String password;
 	public String userId;
@@ -56,5 +56,13 @@ public class UserProfile {
 	@Override
 	public String toString() {
 		return "name: " + name + ". email " + email + " . pass " + password; 
+	}
+	
+	public static UserProfile getUser(){
+		return userProfileUsed;
+	}
+	
+	public static void setUser(UserProfile user){
+		userProfileUsed = user;
 	}
 }

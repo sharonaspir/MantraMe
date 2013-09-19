@@ -29,20 +29,20 @@ public final class R {
         public static final int background5=0x7f020005;
         public static final int icon=0x7f020006;
         public static final int logo=0x7f020007;
-        public static final int white=0x7f020008;
+        public static final int shape4button1=0x7f020008;
+        public static final int shape4button2=0x7f020009;
+        public static final int shape4buttonok=0x7f02000a;
+        public static final int white=0x7f02000b;
     }
     public static final class id {
-        public static final int action_forgot_password=0x7f09002f;
-        public static final int action_settings=0x7f09002e;
+        public static final int action_forgot_password=0x7f09002a;
+        public static final int action_settings=0x7f090029;
         public static final int addMantraAuthor=0x7f090001;
         public static final int addMantraDesc=0x7f090000;
-        public static final int backgroundImage=0x7f09002a;
-        public static final int btnAnonymous=0x7f090028;
-        public static final int btnLogin=0x7f090026;
-        public static final int btnRegister=0x7f090027;
-        public static final int button1=0x7f090021;
-        public static final int button2=0x7f090023;
-        public static final int button3=0x7f090022;
+        public static final int backgroundImage=0x7f090025;
+        public static final int btnAnonymous=0x7f090023;
+        public static final int btnLogin=0x7f090021;
+        public static final int btnRegister=0x7f090022;
         public static final int buttonAddMantraDone=0x7f090006;
         public static final int buttonAddNewUserRatingDone=0x7f090011;
         public static final int buttonConfigDone=0x7f09000c;
@@ -51,9 +51,7 @@ public final class R {
         public static final int button_Options_Next=0x7f090016;
         public static final int button_Options_Next_style=0x7f090018;
         public static final int button_Options_Ok=0x7f09001e;
-        public static final int editTextALLMantraTEST=0x7f09001f;
         public static final int editTextEmailAddress=0x7f090009;
-        public static final int editTextMantraTEST=0x7f090020;
         public static final int editTextPersonName=0x7f090008;
         public static final int editTextUserPassword=0x7f09000a;
         public static final int editTextUserPasswordConfirm=0x7f09000b;
@@ -74,21 +72,20 @@ public final class R {
         public static final int tableRow4=0x7f09001b;
         public static final int tableRow5=0x7f09001d;
         public static final int tableRow6=0x7f090017;
-        public static final int textViewAutorInWidget=0x7f09002d;
-        public static final int textViewMantraShown=0x7f09002c;
-        public static final int textViewUserNameInWidget=0x7f09002b;
-        public static final int user_mail=0x7f090024;
-        public static final int user_password=0x7f090025;
-        public static final int widget_layout=0x7f090029;
+        public static final int textViewAutorInWidget=0x7f090028;
+        public static final int textViewMantraShown=0x7f090027;
+        public static final int textViewUserNameInWidget=0x7f090026;
+        public static final int user_mail=0x7f09001f;
+        public static final int user_password=0x7f090020;
+        public static final int widget_layout=0x7f090024;
     }
     public static final class layout {
         public static final int activity_add_mantra_to_server=0x7f030000;
         public static final int activity_addnewuser=0x7f030001;
         public static final int activity_new_user_ratings=0x7f030002;
         public static final int activity_options=0x7f030003;
-        public static final int activity_testing=0x7f030004;
-        public static final int widgetconfigpage=0x7f030005;
-        public static final int widgetlayout=0x7f030006;
+        public static final int widgetconfigpage=0x7f030004;
+        public static final int widgetlayout=0x7f030005;
     }
     public static final class menu {
         public static final int add_mantra_to_server=0x7f080000;

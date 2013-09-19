@@ -49,7 +49,7 @@ public class NewUserRatings extends Activity {
 
 	public void doneClicked(View view) {	
 
-		Log.w("111111" , "doneClicked");
+		Log.w("NewUserRatings" , "doneClicked");
 		boolean succses = false;
 		
 		try{
@@ -65,38 +65,38 @@ public class NewUserRatings extends Activity {
 			int sport = intrestSport.getProgress();
 			int health = seekBarHealth.getProgress();
 
-			UserProfile user = UserProfile.userProfileUsed ;
+			UserProfile user = UserProfile.getUser() ;
 			if (user != null){
 				user.SetInterst(education, newAge, sport, health);
 				succses = addNewUserToServer(user);
 			}
 
 		}catch(Exception e){
-			Log.w("111111" , "Exception in NewUserRatings.doneClicked(). \n " + e);
+			Log.wtf("NewUserRatings" , "Exception in NewUserRatings.doneClicked(). \n " + e);
 		}
 
 		if (succses){
 
-			Log.w("SHARON" , "succses to connect to server");
+			Log.w("NewUserRatings" , "succses to connect to server");
 			updateMantras();
 			finish();
 		}
 		else{
 
-			Log.w("SHARON" , "Failed to connect to server");
+			Log.w("NewUserRatings" , "Failed to connect to server");
 			
 			// the user is null now
-			UserProfile.userProfileUsed = null;
+			UserProfile.setUser(null);
 			
 			Toast.makeText(NewUserRatings.this, "Failed connecting to server", Toast.LENGTH_LONG).show();
 			
 			try
 			{
-				Log.w("SHARON" , "try to start activity");
+				Log.w("NewUserRatings" , "try to start activity");
 				Intent k = new Intent(getApplicationContext(), WidgetConfigPage.class);
 				startActivity(k);
 			}catch(Exception e){
-				Log.w("WidgetConfigPage" , "Exception! \n" + e);
+				Log.wtf("NewUserRatings" , "Exception! \n" + e);
 			}
 			finish();
 		}
@@ -120,14 +120,11 @@ public class NewUserRatings extends Activity {
 		try {
 			action.get(10, TimeUnit.SECONDS);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Log.wtf("NewUserRatings" , "InterruptedException! \n" + e);
 		} catch (ExecutionException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Log.wtf("NewUserRatings" , "ExecutionException! \n" + e);
 		} catch (TimeoutException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Log.wtf("NewUserRatings" , "TimeoutException! \n" + e);
 		}
 		
 		return !action.URLNotReachable;		
@@ -141,7 +138,7 @@ public class NewUserRatings extends Activity {
 		public Context context;
 
 		protected void onPreExecute() {
-			Log.w("77777777777" , "addNewUser onPreExecute");
+			Log.w("NewUserRatings" , "addNewUser onPreExecute");
 			super.onPreExecute();
 			pDialog = new ProgressDialog(NewUserRatings.this);
 			pDialog.setMessage("Attempting connection...");
@@ -152,10 +149,10 @@ public class NewUserRatings extends Activity {
 
 		protected String doInBackground(String... args) {			
 			
-			Log.w("77777777777" , "addNewUser doInBackground");
+			Log.w("NewUserRatings" , "addNewUser doInBackground");
 			
 			if (!isURLReachable(context, ServerDataBaseManager.URL_ADDUSER)){
-				Log.w("77777777777" , "isURLReachable false");
+				Log.w("NewUserRatings" , "isURLReachable false");
 				URLNotReachable = true;
 				return null;
 			}			
@@ -164,7 +161,7 @@ public class NewUserRatings extends Activity {
 		}
 
 		protected void onPostExecute(String file_url) {
-			Log.w("77777777777" , "addNewUser onPostExecute");
+			Log.w("NewUserRatings" , "addNewUser onPostExecute");
 			// dismiss the dialog once product deleted
 			pDialog.dismiss();
 			if (file_url != null){
@@ -192,11 +189,13 @@ public class NewUserRatings extends Activity {
 						return false;
 					}
 				} catch (MalformedURLException e1) {
+					Log.wtf("NewUserRatings" , "MalformedURLException! \n" + e1);
 					return false;
 				} catch (IOException e) {
+					Log.wtf("NewUserRatings" , "IOException! \n" + e);
 					return false;
 				}catch (Exception e) {
-					Log.wtf("SHARON", "e " + e);
+					Log.wtf("NewUserRatings" , "Exception! \n" + e);
 					return false;
 				}
 			}

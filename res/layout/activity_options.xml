@@ -31,7 +31,7 @@
 
             <Button
                 android:id="@+id/button_Options_Next"
-                android:background="@android:color/holo_blue_light"
+                android:background="@drawable/shape4button1"
                 android:onClick="nextMantraClicked"
                 android:text="Next Mantra"
                 android:textColor="@android:color/white" />
@@ -45,7 +45,7 @@
 
             <Button
                 android:id="@+id/button_Options_Next_style"
-                android:background="@android:color/holo_blue_light"
+                android:background="@drawable/shape4button1"
                 android:onClick="nextStyleClicked"
                 android:text="Next Style"
                 android:textColor="@android:color/white" />
@@ -59,7 +59,7 @@
 
             <Button
                 android:id="@+id/buttonOptionsAddMantraToServer"
-                android:background="#9933b5e5"
+                android:background="@drawable/shape4button2"
                 android:onClick="addMantraToServer"
                 android:text="Add new mantra to server"
                 android:textColor="@android:color/white" />
@@ -73,7 +73,7 @@
 
             <Button
                 android:id="@+id/buttonOptionsReTake"
-                android:background="#9933b5e5"
+                android:background="@drawable/shape4button2"
                 android:onClick="refreshMantrasFromServer"
                 android:text="Refresh Mantras from server"
                 android:textColor="@android:color/white" />
@@ -87,7 +87,7 @@
 
             <Button
                 android:id="@+id/button_Options_Ok"
-                android:background="@android:color/holo_orange_dark"
+                android:background="@drawable/shape4buttonok"
                 android:onClick="okClicked"
                 android:text="OK"
                 android:textColor="@android:color/black" />

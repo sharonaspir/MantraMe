@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-     package="com.Sharon.MantraMeWidget"
-    android:versionCode="2"
-    android:versionName="1.1" >
+    package="com.Sharon.MantraMeWidget"
+    android:versionCode="4"
+    android:versionName="1.3" >
 
     <uses-sdk
         android:minSdkVersion="8"
@@ -37,13 +37,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.Sharon.MantraMeWidget.Testing"
-            android:label="Testing" >
-            <intent-filter>
-                <action android:name="android.appwidget.action.Settings" />
-            </intent-filter>
-        </activity>
-        <activity
             android:name="com.Sharon.MantraMeWidget.WidgetConfigPage"
             android:label="Login" >
             <intent-filter>
@@ -57,6 +50,10 @@
         <activity
             android:name="com.Sharon.MantraMeWidget.NewUserRatings"
             android:label="@string/title_activity_new_user_ratings" >
+        </activity>
+        <activity
+            android:name="com.Sharon.MantraMeWidget.AddMantraToServer"
+            android:label="@string/title_activity_add_mantra_to_server" >
         </activity>
     </application>
 

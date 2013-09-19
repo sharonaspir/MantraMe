@@ -1,6 +1,5 @@
 package com.Sharon.MantraMeWidget;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -73,7 +72,7 @@ public class WidgetConfigPage extends Activity {
 			Intent k = new Intent(getApplicationContext(), AddNewUser.class);
 			startActivityForResult(k,REQUESTCODE);
 		}catch(Exception e){
-			Log.w("WidgetConfigPage" , "Exception! \n" + e);
+			Log.wtf("WidgetConfigPage" , "Exception! \n" + e);
 		}	
 	}
 
@@ -82,7 +81,7 @@ public class WidgetConfigPage extends Activity {
 
 		//ProgressDialog dialog = ProgressDialog.show(WidgetConfigPage.this, "", "Loading...", true);
 
-		UserProfile.userProfileUsed = null;	
+		UserProfile.setUser(null);
 
 		updateMantras();
 
@@ -112,7 +111,7 @@ public class WidgetConfigPage extends Activity {
 			Log.w("WidgetConfigPage" , "user " + user.toString());
 
 			// Set our user
-			UserProfile.userProfileUsed = user;	
+			UserProfile.setUser(user);
 			updateMantras();
 			end();
 		}
@@ -123,13 +122,13 @@ public class WidgetConfigPage extends Activity {
 		boolean isFirstRun = wmbPreference.getBoolean("FIRSTRUN", true);
 		if (isFirstRun)
 		{
-			Log.w("updateMantras" , "first Run");
+			Log.w("WidgetConfigPage" , "updateMantras first Run");
 			ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);		
 			MantraGetter getter = new MantraGetter();
 			getter.connectivityManager = cm;		
 			getter.getAllMantrasFromServer(context);
 		}else{
-			Log.w("updateMantras" , "Not first Run");
+			Log.w("WidgetConfigPage" , "updateMantras Not first Run");
 		}
 
 	}
@@ -151,7 +150,7 @@ public class WidgetConfigPage extends Activity {
 
 	private UserProfile getUserByMailPass(String mail, String password) {	
 
-		Log.w("SHARON" , "checkConnection true");
+		Log.w("WidgetConfigPage" , "checkConnection true");
 
 		LoginUser action = new LoginUser();
 		action.context = this;
@@ -162,14 +161,11 @@ public class WidgetConfigPage extends Activity {
 		try {
 			action.get(20, TimeUnit.SECONDS);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Log.wtf("WidgetConfigPage" , "InterruptedException! \n" + e);
 		} catch (ExecutionException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Log.wtf("WidgetConfigPage" , "ExecutionException! \n" + e);
 		} catch (TimeoutException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Log.wtf("WidgetConfigPage" , "WidgetConfigPage! \n" + e);
 		}
 
 		return action.user;
@@ -195,7 +191,7 @@ public class WidgetConfigPage extends Activity {
 		}
 
 		protected String doInBackground(String... args) {
-			Log.w("LoginUser" , "doInBackground");
+			Log.w("WidgetConfigPage" , "doInBackground");
 
 			if (!isURLReachable(context, ServerDataBaseManager.URL_LOGIN)){
 				return null;
@@ -207,7 +203,7 @@ public class WidgetConfigPage extends Activity {
 		}
 
 		protected void onPostExecute(String file_url) {
-			Log.w("LoginUser" , "onPostExecute");
+			Log.w("WidgetConfigPage" , "onPostExecute");
 			// dismiss the dialog once product deleted
 			pDialog.dismiss();
 			if (file_url != null){
@@ -233,17 +229,19 @@ public class WidgetConfigPage extends Activity {
 					urlc.connect();	            
 
 					if (urlc.getResponseCode() == 200) {        // 200 = "OK" code (http connection is fine).
-						Log.wtf("Connection", "Success !");
+						Log.wtf("WidgetConfigPage", "Success !");
 						return true;
 					} else {
 						return false;
 					}
 				} catch (MalformedURLException e1) {
+					Log.wtf("WidgetConfigPage" , "MalformedURLException! \n" + e1);
 					return false;
 				} catch (IOException e) {
+					Log.wtf("WidgetConfigPage" , "IOException! \n" + e);
 					return false;
 				}catch (Exception e) {
-					Log.wtf("SHARON", "e " + e);
+					Log.wtf("WidgetConfigPage", "Exception " + e);
 					return false;
 				}
 			}

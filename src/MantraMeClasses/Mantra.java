@@ -1,5 +1,6 @@
 package MantraMeClasses;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Mantra {
@@ -11,6 +12,9 @@ public class Mantra {
 	public int ReleventEducation;
 	public int ReleventNewAge;
 	public int ReleventHealth;
+	
+	public static final String mantraDateFormatStr = "yyyy-MM-dd HH:mm:ss";
+	public static final SimpleDateFormat mantraDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 	public Mantra(){
 		this.Description = "";
@@ -23,7 +27,7 @@ public class Mantra {
 		ReleventHealth = 50;
 	}
 
-	public Mantra(String mantra, String author, String id){
+	public Mantra(String mantra, String author, String id){		
 		this.Description = mantra;
 		this.CreationDate = new Date();
 		this.Author = author;
@@ -46,16 +50,21 @@ public class Mantra {
 	}
 
 	public String toString(){
-		String ans = "\n[Mantra id : " + this.Id+ " ,";
-		ans += "man_str : " + this.Description + " ,";
-		ans += "Mantra creation Date : " + this.CreationDate.toString() + " ,";
-		ans += "Mantra Name : " + this.Author + " ,";
-		ans += "ReleventSport : " + this.ReleventSport + " ,";
-		ans += "ReleventEducation : " + this.ReleventEducation + " ,";
-		ans += "ReleventNewAge : " + this.ReleventNewAge + " ,";
-		ans += "ReleventHealth : " + this.ReleventHealth + " ,";
+		String ans = "\n[Mantra id : " 		+ this.Id+ " ,";
+		ans += "man_str : " 				+ this.Description + " ,";
+		ans += "Mantra creation Date : " 	+ getCreationDateInFormat() + " ,";
+		ans += "Mantra Name : " 			+ this.Author + " ,";
+		ans += "ReleventSport : " 			+ this.ReleventSport + " ,";
+		ans += "ReleventEducation : " 		+ this.ReleventEducation + " ,";
+		ans += "ReleventNewAge : " 			+ this.ReleventNewAge + " ,";
+		ans += "ReleventHealth : " 			+ this.ReleventHealth + " ,";
 
 		return ans;			
+	}
+	
+	public String getCreationDateInFormat(){
+		
+		return mantraDateFormat.format(CreationDate);
 	}
 	
 }

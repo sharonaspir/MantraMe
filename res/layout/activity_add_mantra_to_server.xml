@@ -20,7 +20,7 @@
             android:text="Enter the mantra"
             android:textColor="@android:color/holo_blue_dark"
             android:textSize="15sp" />
-        
+
         <EditText
             android:id="@+id/addMantraDesc"
             android:layout_width="match_parent"
@@ -28,7 +28,7 @@
             android:ems="10"
             android:inputType="textMultiLine" >
         </EditText>
-        
+
         <TextView
             android:layout_width="296dp"
             android:layout_height="wrap_content"
@@ -38,7 +38,7 @@
             android:text="Author name"
             android:textColor="@android:color/holo_blue_dark"
             android:textSize="15sp" />
-        
+
         <EditText
             android:id="@+id/addMantraAuthor"
             android:layout_width="match_parent"
@@ -113,14 +113,14 @@
             android:layout_height="wrap_content"
             android:progress="50" />
     </LinearLayout>
-    
+
     <Button
         android:id="@+id/buttonAddMantraDone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:background="@android:color/holo_blue_light"
+        android:background="@drawable/shape4button1"
         android:gravity="center"
         android:onClick="doneAddingMantraClicked"
         android:text="Done"

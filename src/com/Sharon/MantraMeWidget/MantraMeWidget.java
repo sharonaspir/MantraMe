@@ -6,7 +6,6 @@ import java.util.Random;
 import MantraMeClasses.Mantra;
 import MantraMeClasses.MantraGetter;
 import MantraMeClasses.UserProfile;
-import android.R.color;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
@@ -31,7 +30,7 @@ public class MantraMeWidget extends AppWidgetProvider {
 		final int N = appWidgetIds.length;
 		super.onUpdate(context, appWidgetManager, appWidgetIds);
 
-		UserProfile user = UserProfile.userProfileUsed;
+		UserProfile user = UserProfile.getUser();
 
 		for (int i=0; i<N; i++) {						
 			int appWidgetId = appWidgetIds[i];			
@@ -53,6 +52,7 @@ public class MantraMeWidget extends AppWidgetProvider {
 
 			if (user != null){
 				view.setTextViewText(R.id.textViewUserNameInWidget, user.name);
+				view.setFloat(R.id.textViewUserNameInWidget, "setTextSize", 10);
 			}else{
 				// set user name to empty, and resize to 2 size
 				view.setTextViewText(R.id.textViewUserNameInWidget, "");
@@ -130,9 +130,5 @@ public class MantraMeWidget extends AppWidgetProvider {
 			view.setImageViewResource(R.id.backgroundImage, R.drawable.background0);			
 			break;
 		}
-	}
-
-	private void init(){
-		
 	}
 }

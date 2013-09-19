@@ -63,12 +63,12 @@ public class AddNewUser extends Activity{
 			return;
 		}
 
-		Log.w("111111" , "All data recived");		
+		Log.w("AddNewUser" , "All data recived");		
 
 		UserProfile user = new UserProfile(name, email); 
 		user.SetPassWord(password);
 
-		UserProfile.userProfileUsed = user;
+		UserProfile.setUser(user);
 
 		try
 		{
@@ -76,7 +76,7 @@ public class AddNewUser extends Activity{
 			startActivity(k);
 			finish();
 		}catch(Exception e){
-			Log.w("111111" , "Exception in AddNewUser.nextClicked(). \n " + e);
+			Log.wtf("AddNewUser" , "Exception in AddNewUser.nextClicked(). \n " + e);
 		}		
 
 	}

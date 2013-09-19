@@ -96,7 +96,7 @@ public class Options extends Activity {
 
 	public void nextStyleClicked(View view) {	
 
-		Log.w("nextStyleClicked" , "nextStyleClicked ....");
+		Log.w("Options" , "nextStyleClicked ....");
 
 		Context context = this;
 
@@ -122,7 +122,7 @@ public class Options extends Activity {
 			startActivity(k);
 			finish();
 		}catch(Exception e){
-			Log.w("WidgetConfigPage" , "Exception! \n" + e);
+			Log.wtf("Options" , "Exception! \n" + e);
 		}	
 	}
 }

@@ -28,8 +28,7 @@ public class JSONParser {
 
 	}
 
-	// function get json from url
-	// by making HTTP POST or GET mehtod
+	// function get json from url, by making HTTP POST or GET mehtod
 	public JSONObject makeHttpRequest(String url, String method, List<NameValuePair> params) {
 
 		InputStream inputStream = null;
@@ -64,11 +63,11 @@ public class JSONParser {
 			}           
 
 		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
+			Log.wtf("JSONParser", "UnsupportedEncodingException " + e.toString());
 		} catch (ClientProtocolException e) {
-			e.printStackTrace();
+			Log.wtf("JSONParser", "ClientProtocolException " + e.toString());
 		} catch (IOException e) {
-			e.printStackTrace();
+			Log.wtf("JSONParser", "IOException " + e.toString());
 		}
 
 		try {
@@ -82,14 +81,14 @@ public class JSONParser {
 			inputStream.close();
 			json = sb.toString();
 		} catch (Exception e) {
-			Log.e("Buffer Error", "Error converting result " + e.toString());
+			Log.wtf("JSONParser", "Exception Error converting result " + e.toString());
 		}
 
 		// try parse the string to a JSON object
 		try {
 			jObj = new JSONObject(json);
 		} catch (JSONException e) {
-			Log.e("JSON Parser", "Error parsing data " + e.toString());
+			Log.wtf("JSONParser", "JSONException Error parsing data " + e.toString());
 		}
 
 		// return JSON String

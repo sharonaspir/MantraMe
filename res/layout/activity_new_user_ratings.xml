@@ -87,7 +87,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:background="@android:color/holo_blue_light"
+        android:background="@drawable/shape4button1"
         android:gravity="center"
         android:onClick="doneClicked"
         android:text="Done"

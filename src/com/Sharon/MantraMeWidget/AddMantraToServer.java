@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
@@ -12,6 +11,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 import MantraMeClasses.Mantra;
+import MantraMeClasses.MantraGetter;
 import MantraMeClasses.ServerDataBaseManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -19,13 +19,11 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Context;
-import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.SeekBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 public class AddMantraToServer extends Activity {
@@ -91,6 +89,8 @@ public class AddMantraToServer extends Activity {
 			Toast.makeText(AddMantraToServer.this, "Failed to upload mantra", Toast.LENGTH_LONG).show();
 		}
 
+		MantraGetter.addMantraToLocalTable(AddMantraToServer.this, mant);
+
 		finish();
 	}
 
@@ -103,13 +103,13 @@ public class AddMantraToServer extends Activity {
 		try {
 			action.get(10, TimeUnit.SECONDS);
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+			Log.wtf("AddMantraToServer", "InterruptedException " + e);
 			return false;
 		} catch (ExecutionException e) {
-			e.printStackTrace();
+			Log.wtf("AddMantraToServer", "ExecutionException " + e);
 			return false;
 		} catch (TimeoutException e) {
-			e.printStackTrace();
+			Log.wtf("AddMantraToServer", "TimeoutException " + e);
 			return false;
 		}
 
@@ -128,13 +128,13 @@ public class AddMantraToServer extends Activity {
 			Log.w("addMantraToServerAsync" , "doInBackground");
 
 			if (!isURLReachable(context, ServerDataBaseManager.URL_ADDMANTRA)){
-				Log.w("77777777777" , "isURLReachable false");
+				Log.w("AddMantraToServer" , "isURLReachable false");
 				succses = false;
 				return null;
 			}	
 
 			ServerDataBaseManager.addMantra(mant);
-			
+
 			succses = true;
 			return null;
 		}
@@ -159,11 +159,13 @@ public class AddMantraToServer extends Activity {
 						return false;
 					}
 				} catch (MalformedURLException e1) {
+					Log.wtf("AddMantraToServer", "MalformedURLException " + e1);
 					return false;
 				} catch (IOException e) {
+					Log.wtf("AddMantraToServer", "IOException " + e);
 					return false;
 				}catch (Exception e) {
-					Log.wtf("SHARON", "e " + e);
+					Log.wtf("AddMantraToServer", "Exception " + e);
 					return false;
 				}
 			}

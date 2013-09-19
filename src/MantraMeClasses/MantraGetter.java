@@ -1,24 +1,16 @@
 package MantraMeClasses;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.LinkedList;
+import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import com.google.gson.Gson;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -28,13 +20,10 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 public class MantraGetter{
-
-	private static Mantra currentMantra = null;	
-	private static List<Mantra> allMantras = new LinkedList<Mantra>();
-
-	public final static String ALLMANTRASFILENAME = "AllMantrasFile.txt";
-	public final static String CURRENTMANTRASFILENAME = "CURRENTMANTRAS.txt";
-
+	
+	private final String user = "currentUser";
+	private final String keyTime = "readFroServerTimeStamp";
+	
 	// public static Context context;
 	public static ConnectivityManager connectivityManager;
 
@@ -43,7 +32,11 @@ public class MantraGetter{
 
 	public void getAllMantrasFromServer(Context context) {
 
-		Log.w("SHARON" , "getAllMantrasFromServer");
+		Log.w("MantraGetter" , "getAllMantrasFromServer");
+
+		if (!checkShouldDownloadAgain(context)){
+			return;
+		}
 
 		GetAllMantrasAction action = new GetAllMantrasAction();
 		action.connectivityManager = connectivityManager;
@@ -52,90 +45,115 @@ public class MantraGetter{
 		try {
 			action.get(20, TimeUnit.SECONDS);
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+			Log.wtf("MantraGetter", "InterruptedException " + e);;
 		} catch (ExecutionException e) {
-			e.printStackTrace();
+			Log.wtf("MantraGetter", "ExecutionException " + e);
 		} catch (TimeoutException e) {
-			e.printStackTrace();
+			Log.wtf("MantraGetter", "TimeoutException " + e);
 		}
 
 		if (action.failureServer){
-			Log.w("SHARON" , "failureServer mantra getter");
+			Log.w("MantraGetter" , "failureServer mantra getter");
 
 		}else{
-			allMantras = action.mantras;
+			List<Mantra> allMantras = action.mantras;
 
-			// Save the mantras to file
-			// 1111 writeAllMantrasToFile(allMantras, context);
+			deleteAllMantras(context);
+			addMantraToLocalTable(context, allMantras);
 		}
 	}
 
-	private static void writeCurrentMantraToFile(Mantra man,Context context) {		
+	private boolean checkShouldDownloadAgain(Context context) {
+
+		Log.w("MantraGetter" , "checkShouldDownloadAgain");
+
+		Date  now = new Date();
+
+		String dateStamp = readLatestUpdateTimeFromSharedPreferences(context);
+
+		Log.w("MantraGetter" , "dateStamp = " + dateStamp);
+
+		if (dateStamp.isEmpty()){
+
+			Log.w("MantraGetter" , "dateStamp empty");
+			
+			writeTimeToSharedPreferences(context, now);			
+
+			// we need to download
+			return true;
+
+		}else{
+
+			
+			// check time diff
+			try {
+
+				Log.w("MantraGetter" , "lastUpdate parsing : " + dateStamp);
+				
+				Date dateSaved = Mantra.mantraDateFormat.parse(dateStamp);
+
+				Log.w("MantraGetter" , "lastUpdate parsed");
+				
+				long lastUpdate = dateSaved.getTime();				
+				
+				long difference = now.getTime() - lastUpdate;
+
+				Log.w("MantraGetter" , "difference milliseconds: " + difference);
+				
+				double allowGapInMinutes = 0.5;
+				
+				// Check last allowGapInMinutes
+				if (difference < (1000 * 60 * allowGapInMinutes)){
+					// no need to update 
+					Log.w("MantraGetter" , "no need to update . dif = " + difference);
+					return false;
+				}
+				else{
+					// update date stamp and return true
+					writeTimeToSharedPreferences(context, now);			
+
+					// we need to download
+					return true;
+				}
+			} catch (ParseException e) {
+				Log.wtf("MantraGetter" , "ParseException : " + e);
+				return false;
+			}
+			
+			
+		}
+	}
+
+	private String readLatestUpdateTimeFromSharedPreferences(Context context) {
+		// READ Latest server read		
+		SharedPreferences sharedPref = context.getSharedPreferences(user, Context.MODE_PRIVATE);
+		String dateStamp = sharedPref.getString(keyTime, "");
+		return dateStamp;
+	}
+
+	private void writeTimeToSharedPreferences(Context context, Date now) {
+		
+		SharedPreferences sharedPref = context.getSharedPreferences(user, Context.MODE_PRIVATE);		
+		SharedPreferences.Editor editor = sharedPref.edit();
+		
+		editor.putString(keyTime, Mantra.mantraDateFormat.format(now));
+		editor.commit();
+	}
+
+	private static void writeCurrentMantraIDToFile(String id,Context context) {		
+
+		Log.w("MantraGetter" , "writeCurrentMantraIDToFile id " + id);
 
 		String user = "currentUser";
 		SharedPreferences sharedPref = context.getSharedPreferences(user, Context.MODE_PRIVATE);
 		SharedPreferences.Editor editor = sharedPref.edit();
-		editor.putString("mantraDescription", man.Description);
-		editor.putString("mantraAuthor", man.Author);
+		editor.putString("currentMantraId", id);
 
 		editor.commit();
-		Log.w("SHARON" , "SharedPreferences editor.commit();");
-
-		/*
-		Log.w("SHARON" , "write Current Mantra To File");
-
-		String json = "";
-		Gson gson = new Gson();
-		json = gson.toJson(man);
-
-		writeToFile(json, CURRENTMANTRASFILENAME); 
-		Log.w("SHARON" , "write Current Mantra To File DONE");		
-		 */
+		Log.w("MantraGetter" , "SharedPreferences writeCurrentMantraIDToFile.commit();");
 	}
 
-	private void writeAllMantrasToFile1111(List<Mantra> mantraList,Context context) {
-
-		try{
-			Log.w("SHARON" , "writeAllMantrasToFile");
-
-			String allData = "";
-			for (Mantra m : mantraList) {		
-				String json = "";
-
-				Gson gson = new Gson();
-				json = gson.toJson(m);
-
-				allData += json + "\n";
-			}
-
-			// 1111 writeToFile(allData, ALLMANTRASFILENAME,  context); 
-			Log.w("writeAllMantrasToFile" , "writeAllMantrasToFile DONE");
-		}
-		catch(Exception e){
-			Log.w("writeAllMantrasToFile" , "Exception 2 : " + e);
-		}
-	}
-
-	private static void writeToFile1111(String allData, String fileName,Context context) {
-
-		if (context == null){
-			Log.w("SHARON" , "context == null 7 : "); 
-			return;
-		}
-
-		FileOutputStream fos;
-		try {
-			fos = context.openFileOutput(fileName, Context.MODE_WORLD_READABLE);
-			fos.write(allData.getBytes());
-			fos.close();	
-		} catch (FileNotFoundException e) {
-			Log.w("SHARON" , "writeToFile Failed 3 : "  + e);  
-		} catch (IOException e) {
-			Log.w("SHARON" , "writeToFile Failed 4 : "  + e);  
-		}	
-	}
-
-	private static Mantra readCurrentMantraFromFile1111(Context context) {
+	private static Mantra readCurrentMantraFromFile(Context context) {
 
 		if (context == null){
 			return null;
@@ -143,141 +161,30 @@ public class MantraGetter{
 
 		String user = "currentUser";
 		SharedPreferences sharedPref = context.getSharedPreferences(user, Context.MODE_PRIVATE);
-		String desc = sharedPref.getString("mantraDescription", "No shared here 1");
-		String author =  sharedPref.getString("mantraAuthor", "No shared here 2");
+		String id = sharedPref.getString("currentMantraId", "-1");
 
-		Mantra current =  new Mantra(desc, author , "1");
+		Mantra current =  getMantraFromId(context, id);
 
-		Log.w("SHARON" , "SharedPreferences read , current : "  + current.toString());  	
+		//Log.w("SHARON" , "SharedPreferences read , current : "  + current.toString());  	
 
 		return current;
-
-		/*
-		if (context == null){
-			return null;
-		}
-
-		FileInputStream fis = null;
-		Mantra currentMantra = null;
-
-		try {
-			fis = context.openFileInput(CURRENTMANTRASFILENAME);
-			String collected = null;
-
-			byte[] data = new byte[fis.available()];
-
-			while (fis.read(data) != -1){
-				collected = new String(data);
-				Log.w("SHARON" , "readCurrentMantraFromFile fis.read(data) , collected : "  + collected);  				
-			}
-
-			JSONObject msgAsJson = new JSONObject(collected);
-			currentMantra = ServerDataBaseManager.getMantraFromJson(msgAsJson);				
-
-		} catch (IOException e) {
-			Log.w("SHARON" , "readCurrentMantraFromFile Failed : "  + e);  
-		} catch (JSONException e) {
-			Log.w("SHARON" , "readCurrentMantraFromFile Failed : "  + e);  
-		} catch (Exception e) {
-			Log.w("SHARON" , "readCurrentMantraFromFile Failed : "  + e);  
-		}
-		finally{
-			try {
-				fis.close();
-			} catch (IOException e) {
-				Log.w("SHARON" , "readCurrentMantraFromFile fis.close() Failed : "  + e);  
-			}
-		}
-		return currentMantra;
-		 */
-	}
-
-	public static ArrayList<Mantra> readMantrasFromFile1111(Context context) {
-
-		Log.w("readMantrasFromFile" , "Starting readMantrasFromFile");  
-		
-		ArrayList<Mantra> allMan = new ArrayList<Mantra>();	
-		
-		if (context == null){
-			Log.w("readMantrasFromFile" , "context == null in readMantrasFromFile");  
-			return allMan;
-		}	
-
-		FileInputStream fis = null;
-		
-		try {
-			Log.w("readMantrasFromFile" , "ALLMANTRASFILENAME =" + ALLMANTRASFILENAME);  
-			fis = context.openFileInput(ALLMANTRASFILENAME);
-			
-			Log.w("readMantrasFromFile" , "fis =" + fis);  
-			
-			if (fis == null){
-				Log.w("readMantrasFromFile" , "fis == null");  
-				return allMan;
-			}
-			
-			String collected = null;
-
-			byte[] data = new byte[fis.available()];
-
-			while (fis.read(data) != -1){
-				collected = new String(data);
-				Log.w("SHARON" , "fis.read(data) , collected : "  + collected);  				
-			}
-
-			String[] mantrasStr = collected.split("\\n");
-
-			for (String line: mantrasStr) {
-
-				JSONObject msgAsJson;
-				try {
-					msgAsJson = new JSONObject(line);
-					Mantra m = ServerDataBaseManager.getMantraFromJson(msgAsJson);					
-					allMan.add(m);
-					Log.w("SHARON" , "readMantrasFromFile - mantra added = " + m.Description);  
-				} catch (JSONException e) {
-					Log.w("SHARON" , "JSONException 5 : " + e);
-				}
-			}
-
-		} 
-		catch (Exception e){
-			Log.w("SHARON" , "Exception 1 : " + e); 
-			allMan = new ArrayList<Mantra>();
-		}
-		finally{
-			try {
-				fis.close();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-
-		return allMan;
 	}
 
 	public static Boolean next(Context context){
 
-		Log.w("SHARON" , "MangtraGetter.next()");
+		Log.w("MantraGetter" , "MangtraGetter.next()");
+
+		List<Mantra> allMantras = getAllMantrasFromLocalTable(context);
 
 		if (allMantras == null || allMantras.size() == 0){
-
-			Log.w("SHARON" , "allMantras == null");
-
-			// Try re-reading the mantras from file
-			
-			// 1111 allMantras = readMantrasFromFile(context);
-
-			if (allMantras == null || allMantras.size() == 0){
-				Log.w("SHARON" , "allMantras == null , after file read");
-				return false;
-			}
+			return false;
 		}
 
 		Mantra man = null;
 		int count = 0;
 		Random r = new Random();
+
+		Mantra currentMantra = readCurrentMantraFromFile(context);
 
 		if (currentMantra == null){
 			int indexRandom = r.nextInt(allMantras.size());
@@ -286,7 +193,7 @@ public class MantraGetter{
 		else{
 			while ((man == null || man.Id.equals(currentMantra.Id)) && count++ < 100){
 
-				Log.w("SHARON" , "MangtraGetter.next() getting new mantra");
+				Log.w("MantraGetter" , "MangtraGetter.next() getting new mantra");
 
 				int indexRandom = r.nextInt(allMantras.size());
 				man = allMantras.get(indexRandom);
@@ -295,25 +202,23 @@ public class MantraGetter{
 
 		currentMantra = man;
 
-		// write mantra to file
-		writeCurrentMantraToFile(man,context);
+		// write mantra id to file
+		writeCurrentMantraIDToFile(man.Id,context);
 
 		return true;
 	}
 
 	public static Mantra getCurrentMantra(Context context){
 
-		Log.w("SHARON" , "getCurrentMantra");
+		Log.w("MantraGetter" , "getCurrentMantra");
+
+		Mantra currentMantra = readCurrentMantraFromFile(context);
 
 		if (currentMantra == null){
+			Log.w("MantraGetter" , "currentMantra == null");
+			Mantra defaultMantra = new Mantra("This is the default Mantra", "MantraMe", "1");
+			return defaultMantra ;
 
-		// 1111	currentMantra = readCurrentMantraFromFile( context);
-			if (currentMantra == null){
-
-				Log.w("SHARON" , "currentMantra == null");
-				Mantra defaultMantra = new Mantra("This is the default Mantra", "MantraMe", "1");
-				return defaultMantra ;
-			}
 		}
 
 		String mant = currentMantra.Description;
@@ -344,7 +249,7 @@ public class MantraGetter{
 		public boolean failureServer = false;
 
 		protected void onPreExecute() {
-			Log.w("getAllMantrasAction" , "onPreExecute");
+			Log.w("MantraGetter" , "onPreExecute");
 			super.onPreExecute();
 		}
 
@@ -361,11 +266,13 @@ public class MantraGetter{
 		}
 
 		protected void onPostExecute(String file_url) {
-			Log.w("getAllMantrasAction" , "onPostExecute");
+			Log.w("MantraGetter" , "onPostExecute");
 		}		
 
 		public boolean isURLReachable(String urlString) {
 
+			Log.wtf("MantraGetter", "isURLReachable");
+			
 			NetworkInfo netInfo = connectivityManager.getActiveNetworkInfo();
 
 			if (netInfo != null && netInfo.isConnected()) {
@@ -376,21 +283,62 @@ public class MantraGetter{
 					urlc.connect();	            
 
 					if (urlc.getResponseCode() == 200) {        // 200 = "OK" code (http connection is fine).
-						Log.wtf("Connection", "Success !");
+						Log.wtf("MantraGetter", "Success !");
 						return true;
 					} else {
+						Log.wtf("MantraGetter", "urlc.getResponseCode NOT OK");
 						return false;
 					}
 				} catch (MalformedURLException e1) {
+					Log.wtf("MantraGetter" , "MalformedURLException : " + e1);
 					return false;
 				} catch (IOException e) {
+					Log.wtf("MantraGetter" , "IOException : " + e);
 					return false;
 				}catch (Exception e) {
-					Log.wtf("SHARON", "e " + e);
+					Log.wtf("MantraGetter", "Exception " + e);
 					return false;
 				}
 			}
 			return false;
 		}	
+	}
+
+	public static void addMantraToLocalTable(Context context, List<Mantra> mant) {
+		Log.w("MantraGetter", "addMantraToLocalTable");		
+
+		DataBaseManager dbm = new DataBaseManager(context);		
+		dbm.AddMantra(mant);
+	}	
+
+	public static void addMantraToLocalTable(Context context, Mantra mant) {
+		Log.w("MantraGetter", "addMantraToLocalTable");		
+
+		DataBaseManager dbm = new DataBaseManager(context);		
+		dbm.AddMantra(mant);
+	}	
+
+	public static Mantra getMantraFromId(Context context, String id) {
+		Log.w("MantraGetter", "getMantraFromId");		
+
+		DataBaseManager dbm = new DataBaseManager(context);		
+		return dbm.getMantraById(id);
+	}
+
+	public static List<Mantra> getAllMantrasFromLocalTable(Context context) {
+		Log.w("MantraGetter", "getAllMantrasFromLocalTable");
+
+		DataBaseManager dbm = new DataBaseManager(context);	
+		List<Mantra> all = dbm.GetAllMantra();
+
+		return all;
+	}
+
+	private void deleteAllMantras(Context context) {
+
+		Log.wtf("MantraGetter", "deleteAllMantras");
+
+		DataBaseManager dbm = new DataBaseManager(context);	
+		dbm.deleteAllMantras();		
 	}
 }
